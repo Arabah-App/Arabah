@@ -1,0 +1,161 @@
+<%-include('../common/header') %>
+<%-include('../common/sidebar') %>
+
+
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <section id="multiple-column-form">
+        <div class="row">
+          <div class=" col-12 mx-auto">
+            <div class="card">
+              <div class="card-header border-bottom">
+                <h4 class="card-title">View user</h4>
+                <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Actions
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li>
+                      <a class="dropdown-item" href="/teamMemberlist/<%=customerdetails[0]?.userId?._id%>">Team Member</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card-body">
+                <form class="form form-vertical" id="" action="/" method="POST" enctype="multipart/form-data">
+
+                  <div class="row">
+                    <div class="col-12 text-center pb-3">
+                      <label class="col-form-label new_lable" for="name">Image</label>
+                      <img src="<%=customerdetails[0]?.userId?.image%>" class="user_bigimg">
+                    </div>
+                    <div class="col-md-6">
+                      <h4>User</h4>
+                      <div class="mb-1 row">
+                        <div class="col-sm-12">
+                          <label class="col-form-label new_lable" for="name">Name</label>
+                        </div>
+                        <div class="col-sm-12">
+                          <input type="text" id="name" class="form-control" name="name" value="<%=customerdetails[0]?.userId?.name%> " disabled>
+                        </div>
+                      </div>
+                      <div class="mb-1 row">
+                        <div class="col-sm-12">
+                          <label class="col-form-label new_lable" for="email">Email</label>
+                        </div>
+                        <div class="col-sm-12">
+                          <input type="text" id="email" class="form-control" name="email" value="<%=customerdetails[0]?.userId?.email%> " disabled>
+                        </div>
+                      </div>
+                      <div class="mb-1 row">
+                        <div class="col-sm-12">
+                          <label class="col-form-label new_lable" for="phone">Phone</label>
+                        </div>
+                        <div class="col-sm-12">
+                          <input type="text" id="phone" class="form-control" name="phone" value="<%=customerdetails[0]?.userId?.phone%> " disabled>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <h4>Compnay</h4>
+                      <div class="mb-1 row">
+                        <div class="col-sm-12">
+                          <label class="col-form-label new_lable" for="phone">Company Name</label>
+                        </div>
+                        <div class="col-sm-12">
+                          <input type="text" id="phone" class="form-control" name="phone" value="<%=customerdetails[0]?.userId?.companyName%> " disabled>
+                        </div>
+                      </div>
+                      <div class="mb-1 row">
+                        <div class="col-sm-12">
+                          <label class="col-form-label new_lable" for="phone">Company Email</label>
+                        </div>
+                        <div class="col-sm-12">
+                          <input type="text" id="phone" class="form-control" name="phone" value="<%=customerdetails[0]?.userId?.companyEmail%> " disabled>
+                        </div>
+                      </div>
+                      <div class="mb-1 row">
+                        <div class="col-sm-12">
+                          <label class="col-form-label new_lable" for="phone">Company Phone</label>
+                        </div>
+                        <div class="col-sm-12">
+                          <input type="text" id="phone" class="form-control" name="phone" value="<%=customerdetails[0]?.userId?.companyPhone%> " disabled>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="content-body">
+                    <section id="responsive-datatable">
+                      <div class="row">
+                        <div class="card">
+                          <div class="card-header border-bottom">
+                            <h4 class="card-title">Customer listing</h4>
+                            <div class="section-header-breadcrumb-right">
+                            </div>
+                          </div>
+                          <br>
+                          <div class="card-DataTable table-responsive">
+                            <table class="table table-hover-animation" style="color: rgb(65, 64, 64);">
+                              <thead>
+                                <tr>
+                                  <th>S NO.</th>
+                                  <th>Name</th>
+                                  <th>Email</th>
+                                  <th>Phone Number</th>
+                                  <th>Address</th>
+                                  <th>Image</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <%customerdetails?.forEach(function(data,i) {%>
+                                <tr>
+                                  <td>
+                                    <%=1+i%>
+                                  </td>
+                                  <td>
+                                    <%=data?.name%>
+                                  </td>
+                                  <td>
+                                    <%=data?.email%>
+                                  </td>
+                                  <td>
+                                    <%= data?.phoneNumber%>
+                                  </td>
+                                  <td>
+                                    <%= data?.address%>
+                                  </td>
+                                  <td>
+                                    <img src="<%=data?.image%>" width="45px" height="40px" type="submit" style="cursor:pointer; border-radius: 10px;">
+                                  </td>
+                                </tr>
+                                <%} )%>
+                              </tbody>
+                            </table>
+                          </div>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 text-end">
+                      <a href="/userList" class="btn btn-primary" title="Edit Profile"> Back
+                      </a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<%- include('../common/footer') %>

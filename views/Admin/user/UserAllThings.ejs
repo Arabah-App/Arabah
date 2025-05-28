@@ -1,0 +1,214 @@
+<%- include('../common/header') %>
+<%- include('../common/sidebar') %>
+
+<style>
+  .star {
+    color: gold;
+    font-size: 20px;
+    /* Adjust size as needed */
+  }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <section id="multiple-column-form">
+        <div class="row justify-content-center">
+          <div class=" row ">
+            <div class="card">
+              <div class="card-header border-bottom">
+                <h4 class="card-title">Product View</h4>
+              </div>
+              <br>
+              <div class="card-body">
+                <form class="form form-vertical" id="" action="" method="POST" enctype="multipart/form-data">
+
+              </div>
+
+              <div class="col-12 text-center">
+                <h1>Comments</h1>
+              </div>
+              <div class="card-DataTable table-responsive">
+                <table class="table table-hover-animation" style="color: rgb(65, 64, 64);">
+                  <thead>
+                    <tr>
+                      <th>S NO.</th>
+                      <th>User Name</th>
+                      <th>Product Name</th>
+                      <th>User Comment</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (comment && comment.length > 0) { %>
+                    <% comment.forEach(function(data, i) { %>
+                    <tr>
+                      <td> <%= i + 1 %> </td>
+                      <td>
+
+                        <%= data?.userId?.name %>
+
+                      </td>
+
+                      <td> <%= data?.ProductID?.name %> </td>
+                      <td>
+                        <%= data?.comment %>
+                      </td>
+                      <td>
+                        <a href="/editcommment/<%= data._id %>" class="btn btn-sm bg-light-primary">
+                          <i data-feather='eye'></i>
+                        </a>
+
+                      </td>
+                    </tr>
+                    <% }) %>
+                    <% } else { %>
+                    <tr>
+                      <td colspan="5" class="text-center">No comments available</td>
+                    </tr>
+                    <% } %>
+
+                  </tbody>
+                </table>
+              </div>
+              <br>
+              <div class="col-12 text-center">
+                <h1>Rating & Review</h1>
+              </div>
+
+              <div class="card-DataTable table-responsive">
+                <table class="table table-hover-animation" style="color: rgb(65, 64, 64);">
+                  <thead>
+                    <tr>
+                      <th>S NO.</th>
+                      <th>User Name</th>
+                      <th>Product Name</th>
+                      <th>Rating</th>
+                      <th>Review</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (rating && rating.length > 0) { %>
+                    <% rating.forEach(function(data, i) { %>
+                    <tr>
+                      <td> <%= i + 1 %> </td>
+                      <td>
+
+                        <%= data?.userId?.name %>
+
+                      </td>
+
+                      <td> <%= data?.ProductID?.name %> </td>
+
+
+
+
+                      <td>
+                        <% for (let i = 1; i <= 5; i++) { %>
+                        <i class="fa <%=(i <= data?.rating) ? 'fa-star' : 'fa-star-o'%> star"></i>
+                        <% } %>
+                      </td>
+                      <td>
+
+                        <%= data?.review %>
+
+                      </td>
+
+                      <td>
+                        <a href="/editrating/<%= data._id %>" class="btn btn-sm bg-light-primary">
+                          <i data-feather='eye'></i>
+                        </a>
+
+                      </td>
+                    </tr>
+                    <% }) %>
+                    <% } else { %>
+                    <tr>
+                      <td colspan="5" class="text-center">No rating available</td>
+                    </tr>
+                    <% } %>
+
+                  </tbody>
+
+                </table>
+              </div>
+
+
+              <br>
+
+              <div class="col-12 text-center ">
+                <h1>Report User</h1>
+              </div>
+              <div class="card-DataTable table-responsive">
+                <table class="table table-hover-animation" style="color: rgb(65, 64, 64);">
+                  <thead>
+                    <tr>
+                      <th>S NO.</th>
+                      <th>User Name</th>
+                      <th>Product Name</th>
+                      <th>Reason</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (Report && Report.length > 0) { %>
+                    <% Report.forEach(function(data, i) { %>
+                    <tr>
+                      <td> <%= i + 1 %> </td>
+
+
+                      <td>
+
+                        <%= data?.userId?.name %>
+
+                      </td>
+
+                      <td> <%= data?.ProductID?.name %> </td>
+
+
+
+
+                      <td>
+
+                        <%= data?.message %>
+
+                      </td>
+
+                      <td>
+                        <a href="/viewreport/<%= data._id %>" class="btn btn-sm bg-light-primary">
+                          <i data-feather='eye'></i>
+                        </a>
+
+                      </td>
+                    </tr>
+                    <% }) %>
+                    <% } else { %>
+                    <tr>
+                      <td colspan="5" class="text-center">No comments available</td>
+                    </tr>
+                    <% } %>
+
+                  </tbody>
+
+                </table>
+              </div>
+              <div class="row">
+                <div class="col-12 text-end">
+                  <a href="/SubCategoryList" class="btn btn-primary float-right" title="Edit Profile"> Back </a>
+                </div>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+    </section>
+  </div>
+</div>
+</div>
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<%- include('../common/footer') %>

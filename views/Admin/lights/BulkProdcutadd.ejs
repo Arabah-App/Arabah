@@ -1,0 +1,161 @@
+<%- include('../common/header') %> 
+<%- include('../common/sidebar') %>
+
+<!-- BEGIN: Content-->
+<div class="app-content content">
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <section id="multiple-column-form">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header border-bottom">
+                <h4 class="card-title">Add Bulk Product</h4>
+                <div class="section-header-breadcrumb-right">
+                  <a
+                    href="/AddSubCategory"
+                    class="btn btn-primary float-right"
+                    title="Add Manual Product"
+                    >Add Manual Product</a
+                  >
+                </div>
+              </div>
+              <br />
+              <div class="card-body">
+                <form
+                  class="form form-vertical"
+                  action="/bulkProductCreate"
+                  method="POST"
+                  id="profile"
+                  enctype="multipart/form-data"
+                >
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="excelFile"
+                        >Upload Csv File</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <input
+                        type="file"
+                        id="csvFile"
+                        class="form-control"
+                        name="csvFile"
+                        accept=".csv"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div id="file-error" style="color: red; display: none"></div>
+
+                  <div class="row my-5">
+                    <div class="col-12 text-start">
+                      <button
+                        type="button"
+                        class="btn btn-primary waves-effect waves-float waves-light"
+                        onclick="downloadCSV()"
+                      >
+                        Click To Download Sample Document Of Upload CSV File
+                      </button>
+                    </div>
+              
+                    <div class="col-12 text-end">
+                      <button
+                        type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light"
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </form>
+                
+                <!-- Modal for Real-time Loading Spinner -->
+                <div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-body text-center">
+                        <div class="spinner"></div>
+                        <p>Processing your data. Please wait...</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- Footer Section -->
+<%- include('../common/footer') %>
+
+<!-- Add CSS for the Spinner -->
+<style>
+  .spinner {
+    border: 6px solid #f3f3f3; 
+    border-top: 6px solid #3498db; 
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1.5s linear infinite;
+    margin: 0 auto; 
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+
+
+<script>
+  setTimeout(function () {
+    $("div.msg").fadeOut();
+  }, 2000);
+
+  $(document).ready(function () {
+    $("form").on("submit", function (event) {
+      const fileInput = $("#csvFile")[0];
+      const file = fileInput.files[0];
+
+      if (file) {
+        const fileType = file.type;
+        const allowedTypes = ["text/csv"];
+
+        if (!allowedTypes.includes(fileType)) {
+          $("#file-error").text("Please upload a valid CSV file.").show();
+          event.preventDefault();
+          return false;
+        } else {
+          $("#file-error").hide();
+        }
+      }
+
+      // Show the modal with loading spinner
+      $('#loadingModal').modal('show');
+    });
+  });
+
+  function downloadCSV() {
+    const csvContent = "../../../shGuru.csv"; 
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'sample_document.csv');
+    document.body.appendChild(link);
+    link.click();
+  }
+
+  $(window).on("load", function () {
+    if (feather) {
+      feather.replace({
+        width: 14,
+        height: 14,
+      });
+    }
+  });
+</script>

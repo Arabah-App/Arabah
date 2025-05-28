@@ -1,0 +1,281 @@
+<%- include('../common/header') %> <%- include('../common/sidebar') %>
+<style>
+  .table-hover-animation tbody tr:hover {
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
+  }
+
+  .card-title {
+    color: #495057;
+  }
+
+  .status {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .status:hover {
+    transform: scale(1.05);
+  }
+
+  .btn-danger:hover,
+  .btn-success:hover {
+    opacity: 0.8;
+  }
+
+  img {
+    transition: transform 0.3s ease;
+  }
+
+  img:hover {
+    transform: scale(1.1);
+    border: 2px solid #6c757d;
+  }
+
+  .card-DataTable {
+    margin-top: 1rem;
+  }
+
+  .table th,
+  .table td {
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .card p {
+    font-size: 1.5rem;
+    margin: 0;
+    color: #495057;
+  }
+</style>
+
+<!-- BEGIN: Content-->
+<div class="app-content content">
+  <div class="content-overlay"></div>
+  <div class="header-navbar-shadow"></div>
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <section id="responsive-datatable">
+        <div class="row">
+          <div class="card">
+            <div class="card-header border-bottom">
+              <h4 class="card-title">User listing</h4>
+              <div
+                class="section-header-breadcrumb-right d-flex justify-content-between align-items-center"
+              >
+                <div class="active-users p-1 text-center me-1">
+                  <h4 class="card-title text-success mb-1">Active Users</h4>
+                  <p class="display-4 fw-bold text-success">
+                    <%= activeuser %>
+                  </p>
+                </div>
+                <div class="inactive-users p-1 text-center">
+                  <h4 class="card-title text-danger mb-1">Inactive Users</h4>
+                  <p class="display-4 fw-bold text-danger">
+                    <%= Inactiveuser %>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <br />
+            <div class="card-DataTable table-responsive">
+              <table
+                class="table table-hover-animation"
+                style="color: rgb(65, 64, 64)"
+              >
+                <thead>
+                  <tr>
+                    <th>S NO.</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Image</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <%userData.forEach(function(data,i) {%>
+                  <tr>
+                    <td><%=1+i%></td>
+                    <td><%= data?.name ? data.name : "Not Specified" %></td>
+                    <td><%= data?.email ? data.email : "Not Specified" %></td>
+                    <td><%=data?.phone%></td>
+                    <td>
+                      <img
+                        src="<%=data?.image%>"
+                        width="45px"
+                        height="40px"
+                        type="submit"
+                        style="cursor: pointer; border-radius: 10px"
+                      />
+                    </td>
+                    <td>
+                      <% if(data?.status==1) { %>
+                      <button
+                        onclick="changeStatus(this)"
+                        id="userId_<%-data.id%>"
+                        class="btn btn-sm btn-success status"
+                        data-id="<%=data._id%>"
+                        value="0"
+                      >
+                        Active
+                      </button>
+                      <% } else { %>
+                      <button
+                        onclick="changeStatus(this)"
+                        id="userId_<%-data.id%>"
+                        class="btn btn-sm btn-danger status"
+                        data-id="<%=data._id%>"
+                        value="1"
+                      >
+                        IN-Active
+                      </button>
+                      <% } %>
+                    </td>
+                    <td>
+                      <a
+                        href="/viewUser/<%=data._id%>"
+                        class="btn btn-sm bg-light-primary"
+                        ><i data-feather="eye"></i
+                      ></a>
+                      <!-- <a href="/editUser/<%=data._id%>" class="btn btn-sm bg-warning"><i data-feather='edit'></i></a> -->
+                      <button
+                        onclick="confirmDelete('<%=data._id%>')"
+                        class="btn btn-sm bg-danger"
+                      >
+                        <i data-feather="trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <%} )%>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+
+<%- include('../common/footer') %>
+
+<script>
+  setTimeout(function () {
+    $("div.msg").fadeOut();
+  }, 2000);
+</script>
+
+<script>
+  $(document).ready(function () {
+    var table = $(".table").DataTable({
+      paging: true,
+      searching: true,
+      info: true,
+      columnDefs: [
+        {
+          orderable: false,
+          targets: [2,3,4,5, 6], 
+        },
+      ],
+    });
+
+    // Redraw event to replace feather icons after each table update
+    table.on("draw", function () {
+      if (feather) {
+        feather.replace(); // Refresh Feather icons after each table update
+      }
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    // alert("ready!");
+  });
+
+  function confirmDelete(id) {
+    console.log(">>>>>>>>done>>>>>>>>>>", id);
+
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-danger",
+        cancelButton: "btn btn-success",
+      },
+      buttonsStyling: true,
+    });
+
+    swalWithBootstrapButtons
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      })
+      .then((isConfirm) => {
+        if (isConfirm.isConfirmed) {
+          $.ajax({
+            url: "/deleteUser/:id",
+            type: "delete",
+            data: {
+              id: id,
+            },
+            success: function (result) {},
+          });
+          swalWithBootstrapButtons
+            .fire("Deleted!", "The user has been deleted .", "success")
+            .then(() => {
+              location.reload();
+            });
+        } else {
+          swalWithBootstrapButtons.fire(
+            "Cancelled",
+            "The user is safe :)",
+            "error"
+          );
+        }
+      });
+  }
+</script>
+
+<script>
+  const changeStatus = (val) => {
+    console.log(val);
+    let id = val.getAttribute("data-id");
+    let value = val.getAttribute("value");
+    let elemID = val.getAttribute("id");
+    elemID = document.getElementById(elemID);
+
+    $.ajax({
+      type: "post",
+      url: "/userStatus",
+      data: {
+        id: id,
+        value: value,
+      },
+      success: function (data) {
+        if (data) {
+          elemID.setAttribute("value", 0);
+          elemID.innerText = `Active`;
+          elemID.classList.remove("btn-danger");
+          elemID.classList.add("btn-success");
+        } else {
+          elemID.setAttribute("value", 1);
+          elemID.innerText = `IN-Active`;
+          elemID.classList.remove("btn-success");
+          elemID.classList.add("btn-danger");
+        }
+        window.location.reload();
+      },
+    });
+  };
+</script>

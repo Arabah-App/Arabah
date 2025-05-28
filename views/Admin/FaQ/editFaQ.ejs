@@ -1,0 +1,129 @@
+<%- include('../common/header') %>
+<%- include('../common/sidebar') %>
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <section id="multiple-column-form">
+        <div class="row justify-content-center">
+          <div class=" row">
+            <div class="card">
+              <div class="card-header border-bottom">
+                <h4 class="card-title">Update FAQ</h4>
+              </div>
+              <br>
+              <div class="card-body">
+                <form class="form form-vertical" id="profile" action="/updateFaQ" method="POST">
+                  <div class="mb-1 row">
+                    <div class="col-md-14">
+                      <div class="mb-1 row">
+                        <div class="col-sm-2">
+                          <label class="col-form-label new_lable" for="name">Question</label>
+                        </div>
+                        <div class="col-sm-10">
+                          <input type="text" id="question" class="form-control" name="question" value="<%=Goaldetail?.question%> " required>
+                          <input type="hidden" name="id" value="<%=Goaldetail?.id%>" required>
+                        </div>
+                      </div>
+                      <div class="mb-1 row">
+                        <div class="col-sm-2">
+                          <label class="col-form-label new_lable" for="name">Question(In Arabic)</label>
+                        </div>
+                        <div class="col-sm-10">
+                          <input type="text" id="question" class="form-control" name="questionArabic" value="<%=Goaldetail?.questionArabic%> " required>
+                          <input type="hidden" name="id" value="<%=Goaldetail?.id%>" required>
+                        </div>
+                      </div>
+                      <div class="mb-1 row">
+                        <div class="col-sm-2">
+                          <label class="col-form-label new_lable" for="answer">Answer</label>
+                        </div>
+                        <div class="col-sm-10">
+                          <textarea class="form-control" id="answer" rows="5" name="answer" required> <%=Goaldetail?.answer%>  </textarea>
+                        </div>
+                      </div>
+                      <div class="mb-1 row">
+                        <div class="col-sm-2">
+                          <label class="col-form-label new_lable" for="answer">Answer(In Arabic)</label>
+                        </div>
+                        <div class="col-sm-10">
+                          <textarea class="form-control" id="answer" rows="5" name="answerArabic" required> <%=Goaldetail?.answerArabic%>  </textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-13 text-end">
+                      <button type="submit" class="btn btn-primary waves-effect waves-float waves-light">Update</button>
+                      <!-- <a href="/subscriptionList" class="btn btn-primary float-right" title="Edit Profile"> Back </a>   -->
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+          </div>
+          <div class="sidenav-overlay"></div>
+          <div class="drag-target"></div>
+          <%- include('../common/footer') %>
+
+
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js" integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+          <script>
+            $(document).ready(function() {
+
+              jQuery.validator.addMethod("noSpace", function(value, element) {
+                return value == '' || value.trim().length != 0;
+              }, "No space allowed");
+
+              $('#profile').validate({
+                rules: {
+                  question: {
+                    required: true,
+                    noSpace: true,
+    
+                  },
+                  answer: {
+                    required: true,
+                    noSpace: true,
+             
+                  },
+                },
+
+                errorElement: "div",
+                errorClass: "jqval-error",
+                errorPlacement: function(error, element) {
+                  error.insertAfter(element);
+                  error.slideDown(400);
+                  error.animate({
+                    opacity: 1
+                  }, {
+                    queue: false,
+                    duration: 700
+                  });
+        error.css("color", "red"); 
+
+                },
+
+                submitHandler: function(form) {
+                  var error = $(".assign_error_div").text();
+                  if (!error) {
+                    form.submit();
+                  }
+                }
+              });
+            });
+          </script>
+
+          <script>
+            $(window).on('load', function() {
+              if (feather) {
+                feather.replace({
+                  width: 14,
+                  height: 14
+                });
+              }
+            })
+          </script>

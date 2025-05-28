@@ -1,0 +1,83 @@
+<%- include('../common/header') %>
+<script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/super-build/ckeditor.js"></script>
+<%- include('../common/sidebar') %>
+
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <section id="multiple-column-form">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title"> About Us</h4>
+            <div class="section-header-breadcrumb-right">
+              <a href="/Arabicaboutus" class="btn btn-primary float-right" title="Edit Profile">  About Us (In Arabic)</a>
+            </div>
+          </div>
+          <div class="card-body">
+            <form action="/updatecms" method="post">
+              <div class="form-group row mb-2">
+                <label class="col-form-label text-md-left col-10 col-md-1 col-lg-1">Title </label>
+                <div class="col-sm-12 col-md-12">
+                  <input type="text" name="title" value="<%= aboutUsData?.title %> " class="form-control" disabled>
+                </div>
+              </div>
+              <div class="form-group row mb-2">
+                <label class="col-form-label col-12 col-md-3 col-lg-3">Description</label>
+                <div class="col-sm-12 col-md-12">
+                  <textarea class="editor" id="editor" name="description" class="form-control" required><%= aboutUsData?.description %></textarea>
+                  <input type="hidden" name="id" value="<%= aboutUsData?.id %>"><br>
+                  <br>
+                  <button type="submit" class="btn btn-primary">Submit <i class="icon-arrow-right14 position-right"></i></button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<%- include('../common/footer') %>
+
+<script>
+  window.onload = function() {
+    CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
+      list: {
+        properties: {
+          styles: true,
+          startIndex: true,
+          reversed: true
+        }
+      },
+      removePlugins: [
+        'AIAssistant',
+        'CKBox',
+        'CKFinder',
+        'EasyImage',
+        'Base64UploadAdapter',
+        'MultiLevelList',
+        'RealTimeCollaborativeComments',
+        'RealTimeCollaborativeTrackChanges',
+        'RealTimeCollaborativeRevisionHistory',
+        'PresenceList',
+        'Comments',
+        'TrackChanges',
+        'TrackChangesData',
+        'RevisionHistory',
+        'Pagination',
+        'WProofreader',
+        'MathType',
+        'SlashCommand',
+        'Template',
+        'DocumentOutline',
+        'FormatPainter',
+        'TableOfContents',
+        'PasteFromOfficeEnhanced',
+        'CaseChange'
+      ]
+    });
+  }
+</script>

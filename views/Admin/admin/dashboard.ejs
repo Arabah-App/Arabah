@@ -1,0 +1,285 @@
+<%- include('../common/header') %>
+<%- include('../common/sidebar') %>
+<style>
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .card {
+    flex: 1;
+    /* min-width: 300px; */
+    /* Adjust the minimum width as needed */
+  }
+
+  #userGrowthChart,
+  #chart {
+    width: 100%;
+    height: 300px;
+    /* Set height for both charts */
+  }
+</style>
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-header row"></div>
+    <div class="content-body">
+      <div class="main-content">
+        <section class="section">
+          <div class="section-header">
+            <h1>Dashboard</h1>
+          </div>
+          <div class="row">
+            <div class="col-lg-3 col-md-5 col-sm-5 col-12">
+              <div class="card" onclick="location.href='/userList'" style="cursor: pointer;">
+                <div class="card-header">
+                  <div>
+                    <h2 class="fw-bolder mb-0">
+                      <%=users%>
+                    </h2>
+                    <p class="card-text">Users</p>
+                  </div>
+                  <div class="avatar bg-light-primary p-50 m-0">
+                    <div class="avatar-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#F3F3F3">
+                        <path d="M38-160v-94q0-35 18-63.5t50-42.5q73-32 131.5-46T358-420q62 0 120 14t131 46q32 14 50.5 42.5T678-254v94H38Zm700 0v-94q0-63-32-103.5T622-423q69 8 130 23.5t99 35.5q33 19 52 47t19 63v94H738ZM358-481q-66 0-108-42t-42-108q0-66 42-108t108-42q66 0 108 42t42 108q0 66-42 108t-108 42Zm360-150q0 66-42 108t-108 42q-11 0-24.5-1.5T519-488q24-25 36.5-61.5T568-631q0-45-12.5-79.5T519-774q11-3 24.5-5t24.5-2q66 0 108 42t42 108ZM98-220h520v-34q0-16-9.5-31T585-306q-72-32-121-43t-106-11q-57 0-106.5 11T130-306q-14 6-23 21t-9 31v34Zm260-321q39 0 64.5-25.5T448-631q0-39-25.5-64.5T358-721q-39 0-64.5 25.5T268-631q0 39 25.5 64.5T358-541Zm0 321Zm0-411Z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-5 col-sm-5 col-12">
+              <div class="card" onclick="location.href='/CategoryList'" style="cursor: pointer;">
+                <div class="card-header">
+                  <div>
+                    <h2 class="fw-bolder mb-0">
+                      <%=category%>
+                    </h2>
+                    <p class="card-text">Categroy</p>
+                  </div>
+                  <div class="avatar bg-light-primary p-50 m-0">
+                    <div class="avatar-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#F3F3F3">
+                        <path d="m261-526 220-354 220 354H261ZM706-80q-74 0-124-50t-50-124q0-74 50-124t124-50q74 0 124 50t50 124q0 74-50 124T706-80Zm-586-25v-304h304v304H120Zm586.08-35Q754-140 787-173.08q33-33.09 33-81Q820-302 786.92-335q-33.09-33-81-33Q658-368 625-334.92q-33 33.09-33 81Q592-206 625.08-173q33.09 33 81 33ZM180-165h184v-184H180v184Zm189-421h224L481-767 369-586Zm112 0ZM364-349Zm342 95Z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-5 col-sm-5 col-12">
+              <div class="card" onclick="location.href='/CommentList'" style="cursor: pointer;">
+                <div class="card-header">
+                  <div>
+                    <h2 class="fw-bolder mb-0">
+                      <%=Comments%>
+                    </h2>
+                    <p class="card-text">Comments</p>
+                  </div>
+                  <div class="avatar bg-light-primary p-50 m-0">
+                    <div class="avatar-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="35px" height="35px" viewBox="0 0 24 24" fill="none" stroke="#F3F3F3" stroke-width=" 2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-message-dots">
+
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M12 11v.01" />
+                        <path d="M8 11v.01" />
+                        <path d="M16 11v.01" />
+                        <path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-5 col-sm-5 col-12">
+              <div class="card" onclick="location.href='/reportList'" style="cursor: pointer;">
+                <div class="card-header">
+                  <div>
+                    <h2 class="fw-bolder mb-0">
+                      <%=reports%>
+                    </h2>
+                    <p class="card-text">Report Product</p>
+                  </div>
+                  <div class="avatar bg-light-primary p-50 m-0">
+                    <div class="avatar-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="35px" height="35px" viewBox="0 0 24 24" fill="none" stroke="#F3F3F3" stroke-width=" 2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-report-off">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M5.576 5.595a2 2 0 0 0 -.576 1.405v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2m0 -4v-8a2 2 0 0 0 -2 -2h-2" />
+                        <path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 1 1 0 4h-2" />
+                        <path d="M3 3l18 18" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-5 col-sm-5 col-12">
+              <div class="card" onclick="location.href='/SubCategoryList'" style="cursor: pointer;">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <div>
+                    <h2 class="fw-bolder mb-0">
+                      <%=Light%>
+                    </h2>
+                    <p class="card-text">Products</p>
+                  </div>
+                  <div class="avatar bg-light-primary p-50 m-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35px" height="35px" viewBox="0 0 24 24" fill="none" stroke="#F3F3F3" stroke-width=" 2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-shopping-bag">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" />
+                      <path d="M9 11v-5a3 3 0 0 1 6 0v5" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-5 col-sm-5 col-12">
+              <div class="card" onclick="location.href='/contactUsList'" style="cursor: pointer;">
+                <div class="card-header">
+                  <div>
+                    <h2 class="fw-bolder mb-0">
+                      <%=Contact%>
+                    </h2>
+                    <p class="card-text">Contacts</p>
+                  </div>
+                  <div class="avatar bg-light-primary p-50 m-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#F3F3F3">
+                      <path d="M440-120v-60h340v-304q0-123.69-87.32-209.84Q605.36-780 480-780q-125.36 0-212.68 86.16Q180-607.69 180-484v244h-20q-33 0-56.5-23.5T80-320v-80q0-21 10.5-39.5T120-469l3-53q8-68 39.5-126t79-101q47.5-43 109-67T480-840q68 0 129 24t109 66.5Q766-707 797-649t40 126l3 52q19 9 29.5 27t10.5 38v92q0 20-10.5 38T840-249v69q0 24.75-17.62 42.37Q804.75-120 780-120H440Zm-80.18-290q-12.82 0-21.32-8.68-8.5-8.67-8.5-21.5 0-12.82 8.68-21.32 8.67-8.5 21.5-8.5 12.82 0 21.32 8.68 8.5 8.67 8.5 21.5 0 12.82-8.68 21.32-8.67 8.5-21.5 8.5Zm240 0q-12.82 0-21.32-8.68-8.5-8.67-8.5-21.5 0-12.82 8.68-21.32 8.67-8.5 21.5-8.5 12.82 0 21.32 8.68 8.5 8.67 8.5 21.5 0 12.82-8.68 21.32-8.67 8.5-21.5 8.5ZM241-462q-7-106 64-182t177-76q87 0 151 57.5T711-519q-89-1-162.5-50T434.72-698Q419-618 367.5-555.5T241-462Z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-5 col-sm-5 col-12">
+              <div class="card" onclick="location.href='/FaQList'" style="cursor: pointer;">
+                <div class="card-header">
+                  <div>
+                    <h2 class="fw-bolder mb-0">
+                      <%=Faq%>
+                    </h2>
+                    <p class="card-text">FAQ</p>
+                  </div>
+                  <div class="avatar bg-light-primary p-50 m-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#F3F3F3">
+                      <path d="M543-340q16.6 0 28.8-12.2T584-381q0-16.6-12.2-28.8T543-422q-16.6 0-28.8 12.2T502-381q0 16.6 12.2 28.8T543-340Zm-25-126h47q2-29 8.5-43t32.5-39q27-26 37.5-45.4Q654-612.79 654-639q0-45.88-31.5-74.94Q591-743 540-743q-38 0-68 20.5T428-665l45 19q11-25 27.5-38t39.5-13q29.78 0 48.39 17T607-637q0 20-9 35t-32 32q-32 29-40 46.5t-8 57.5ZM260-200q-24 0-42-18t-18-42v-560q0-24 18-42t42-18h560q24 0 42 18t18 42v560q0 24-18 42t-42 18H260Zm0-60h560v-560H260v560ZM140-80q-24 0-42-18t-18-42v-620h60v620h620v60H140Zm120-740v560-560Z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-5 col-sm-5 col-12">
+              <div class="card" onclick="location.href='/StoreList'" style="cursor: pointer;">
+                <div class="card-header">
+                  <div>
+                    <h2 class="fw-bolder mb-0">
+                      <%=Store%>
+                    </h2>
+                    <p class="card-text">Stores</p>
+                  </div>
+                  <div class="avatar bg-light-primary p-50 m-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 0 24 24" width="35px" fill="#F3F3F3">
+                      <path d="M4 4h16c.55 0 1 .45 1 1v2c0 .27-.11.52-.29.71l-1.41 1.41c-.2.2-.45.29-.71.29H6.41c-.26 0-.51-.1-.71-.29L4.29 7.71A1.003 1.003 0 0 1 4 7V5c0-.55.45-1 1-1zm16 9v7c0 .55-.45 1-1 1h-4c-.55 0-1-.45-1-1v-4H10v4c0 .55-.45 1-1 1H5c-.55 0-1-.45-1-1v-7H2v-2c0-.55.45-1 1-1h18c.55 0 1 .45 1 1v2h-2z" />
+                    </svg>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      </div>
+
+
+
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-header">
+              <h4>Users</h4>
+            </div>
+            <div class="card-body">
+              <div id="userGrowthChart"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-header">
+              <h4>Products</h4>
+            </div>
+            <div class="card-body">
+              <div id="productGrowthChart"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('../common/footer') %>
+
+    <!-- Load ApexCharts Script -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.44.2/apexcharts.min.css" integrity="sha512-qc0GepkUB5ugt8LevOF/K2h2lLGIloDBcWX8yawu/5V8FXSxZLn3NVMZskeEyOhlc6RxKiEj6QpSrlAoL1D3TA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.44.2/apexcharts.min.js" integrity="sha512-0C7wVtM3EhVJMUXV6o50mKRgLwKZf+aRws1BhqmNabPNIkGEvyPncYBmXhpl4A3+TdpkY2HFiI3Eyv32uVGo4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        // User Growth Chart
+        var userOptions = {
+          chart: {
+            type: 'bar',
+            height: 350
+          },
+          series: [{
+            name: 'Current Year Users',
+            data: <%= JSON.stringify(userCounts) %> // Ensure `userCounts` is passed from the server
+          }],
+          yaxis: {
+          title: {
+            text: 'Current Year Users',
+          },
+        },
+          xaxis: {
+            
+            categories: [
+              "January", "February", "March", "April",
+              "May", "June", "July", "August",
+              "September", "October", "November", "December"
+            ]
+          },
+        };
+        var userChart = new ApexCharts(document.querySelector("#userGrowthChart"), userOptions);
+        userChart.render();
+
+        // Product Growth Chart
+        var productOptions = {
+          chart: {
+            type: 'bar',
+            height: 350
+          },
+          series: [{
+            name: 'Current Year Products',
+            data: <%= JSON.stringify(counts) %>
+          }],
+          yaxis: {
+          title: {
+            text: 'Current Year Products',
+          },
+        },
+          xaxis: {
+            categories: [
+              "January", "February", "March", "April",
+              "May", "June", "July", "August",
+              "September", "October", "November", "December"
+            ]
+          }
+        };
+        var productChart = new ApexCharts(document.querySelector("#productGrowthChart"), productOptions);
+        productChart.render();
+      });
+    </script>

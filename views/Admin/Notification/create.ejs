@@ -1,0 +1,162 @@
+<%- include('../common/header') %> <%- include('../common/sidebar') %>
+
+<!-- BEGIN: Content-->
+<div class="app-content content">
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <section id="multiple-column-form">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Send Notification</h4>
+              </div>
+              <br />
+              <div class="card-body">
+                <form
+                  class="form form-vertical"
+                  id=""
+                  action="/notifications"
+                  method="POST"
+                >
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="name"
+                        >Select Users</label
+                      >
+                    </div>
+                    <div class="col-sm-6">
+                      <label for="">
+                        <input
+                          type="checkbox"
+                          id="select-all"
+                          onclick="allselected()"
+                        />
+                        ALL
+                      </label>
+
+                      <select
+                        id="choices-multiple-remove-button"
+                        name="user_ids"
+                        placeholder="Select Users"
+                        multiple
+                      >
+                        <% list.forEach((obj) => { %>
+                        <option value="<%= obj._id %>">
+                          <%= obj.name %> <%= obj.phone %>
+                        </option>
+                        <% }) %>
+                        <option value="All" class="check_selected">All</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="name"
+                        >Title</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        id="title"
+                        class="form-control"
+                        name="title"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="message"
+                        >Message</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <textarea class="form-control" name="message"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 text-end">
+                      <button
+                        type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light"
+                      >
+                        Send
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<%- include('../common/footer') %>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<script>
+  let choicesInstance;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Initialize Choices.js on the select element
+    const selectElement = document.getElementById(
+      "choices-multiple-remove-button"
+    );
+    choicesInstance = new Choices(selectElement, {
+      removeItemButton: true,
+      placeholderValue: "Select Users",
+      shouldSort: false,
+    });
+  });
+
+  function allselected() {
+    const isChecked = document.getElementById("select-all").checked;
+
+    if (isChecked) {
+      // Add 'All' option dynamically
+      const allExists = choicesInstance
+        .getValue()
+        .some((item) => item.value === "All");
+
+      if (!allExists) {
+        choicesInstance.setChoiceByValue("All");
+      }
+      choicesInstance.removeActiveItems();
+
+      // Then set only the 'All' option
+      choicesInstance.setChoiceByValue("All");
+      
+    } else {
+      // Remove 'All' option
+      const currentValues = choicesInstance.getValue();
+
+      currentValues.forEach((item) => {
+        if (item.value === "All") {
+          choicesInstance.removeActiveItemsByValue("All");
+        }
+      });
+    }
+  }
+</script>
+
+<script>
+  $(document).ready(function () {
+    var multipleCancelButton = new Choices("#choices-multiple-remove-button", {
+      removeItemButton: true,
+      // maxItemCount:5,
+      // searchResultLimit:5,
+      // renderChoiceLimit:5
+    });
+  });
+</script>

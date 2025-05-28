@@ -1,0 +1,1238 @@
+<%- include('../common/header'); -%> <%- include('../common/sidebar'); -%>
+<style>
+  /* Style for the modal */
+  #cropModal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed position */
+    z-index: 1000; /* Make sure the modal is on top */
+    top: 0; /* Position from top */
+    left: 0; /* Position from left */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    overflow: auto; /* Allow scrolling if content overflows */
+    padding-top: 100px; /* Space from the top */
+  }
+
+  /* Modal content */
+  .modal-content {
+    background-color: white;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Width of the modal */
+    max-width: 600px; /* Maximum width */
+    border-radius: 10px; /* Rounded corners */
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Close button */
+  .close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Heading style */
+  .modal-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+
+  /* Button style */
+  #cropImage {
+    display: block;
+    width: 100%;
+    background-color: #4caf50; /* Green background */
+    color: white;
+    padding: 15px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+  }
+  .cropper-container.cropper-bg {
+    width: 100% !important;
+    height: 550px !important;
+    overflow: hidden;
+}
+
+  #cropImage:hover {
+    background-color: #45a049; /* Darker green on hover */
+  }
+
+  /* Image preview styling */
+  #imagePreview {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    object-fit: cover; /* Ensure the image covers the area */
+  }
+</style>
+<style>
+  .img-thumbnail {
+    padding: 0.25rem;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 50%;
+    max-width: 100%;
+    height: 17rem;
+    width: 18rem;
+  }
+
+  .new_lable {
+    color: black;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  ::-webkit-file-upload-button {
+    display: none;
+  }
+
+  ::file-selector-button {
+    display: none;
+  }
+
+  input[type="file"] {
+    color: transparent;
+  }
+
+  .fe-24 {
+    position: absolute;
+    top: 292px;
+    left: 268px;
+    color: #ffffff;
+    border: 2px solid #878181fc;
+    border-radius: 50%;
+    background: #000000c9;
+  }
+
+  .camera_icon {
+    height: 3rem;
+    width: 3rem;
+    padding: 9px;
+    display: inline-block;
+  }
+</style>
+
+<body
+  class="vertical-layout vertical-menu-modern navbar-floating footer-static"
+  data-open="click"
+  data-menu="vertical-menu-modern"
+  data-col=""
+>
+  <!-- BEGIN: Content-->
+  <div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper container-xxl p-0">
+      <div class="content-header row"></div>
+      <div class="content-body">
+        <section id="multiple-column-form">
+          <div class="row">
+            <div class="col-md-12 col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h4 class="card-title">Product Update</h4>
+                </div>
+                <br />
+                <div class="card-body">
+
+
+
+
+                  <form
+                    class="form form-horizontal"
+                    action="/updatelights"
+                    method="POST"
+                    id="profile"
+                    enctype="multipart/form-data"
+                  >
+                  <input type="hidden" id="croppedImage" name="image" />
+                    <div class="row">
+                      <div class="col-md-12" style="margin-top: 17px">
+                        <div class="col-md-4">
+                          <div class="profile-widget-header text-center position-relative">
+                            <img
+                              src="<%=lightdetail?.image%>"
+                              id="output2"
+                              alt="Profile Edit"
+                              class="ms-md-0 mx-auto img-thumbnail user_bigimg"
+                            />
+                            <div class="top_cam">
+                              <input
+                                class="d-none"
+                                onchange="loadFile(event)"
+                                type="file"
+                                id="imgInp"
+                                name="image"
+                                accept=".png, .jpg, .jpeg"
+                              />
+                              <label for="imgInp" style="cursor: pointer">
+                                <i class="fe camera_icon" data-feather="camera"></i>
+                              </label>
+                            </div>
+                          </div>
+                          <div id="cropModal" class="modal">
+                            <div class="modal-content">
+                              <span id="closeModal" class="close">&times;</span>
+                              <h2>Crop Image</h2>
+                              <img id="imagePreview" src="" alt="Image to crop" />
+                              <button type="button" id="cropImage">Crop</button>
+                            </div>
+                          </div>
+                          <input type="hidden" id="croppedImage" name="croppedImage" />
+                        </div>
+                        <div class="mb-1 row">
+                          <div class="col-sm-2">
+                            <label
+                              class="col-form-label new_lable"
+                              for="categoryName"
+                              >Category Name</label
+                            >
+                          </div>
+                          <div class="col-sm-10">
+                            <input 
+                              type="text"
+                              id="categoryName"
+                              class="form-control"
+                        
+                              value="<%= lightdetail.categoryNames?.categoryName %>"
+                              maxlength="60"
+                              readonly
+                              required
+                            />
+                       
+
+                            <input
+                              type="hidden"
+                              name="id"
+                              value="<%= lightdetail?._id %>"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div class="mb-1 row">
+                          <div class="col-sm-2">
+                            <label class="col-form-label new_lable" for="name"
+                              >Product Name</label
+                            >
+                          </div>
+                          <div class="col-sm-10">
+                            <input
+                              type="text"
+                              id="name"
+                              class="form-control"
+                              name="name"
+                              value="<%=lightdetail.name%>"
+                              maxlength="60"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div class="mb-1 row">
+                          <div class="col-sm-2">
+                            <label class="col-form-label new_lable" for="name"
+                              >Product Name (In Arabic)</label
+                            >
+                          </div>
+                          <div class="col-sm-10">
+                            <input
+                              type="text"
+                              id="name"
+                              class="form-control"
+                              name="nameArabic"
+                              value="<%=lightdetail.nameArabic%>"
+                              maxlength="60"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div class="mb-1 row">
+                          <div class="col-sm-2">
+                            <label class="col-form-label new_lable" for="name"
+                              >Product Description</label
+                            >
+                          </div>
+                          <div class="col-sm-10">
+                            <input
+                              type="text"
+                              id="name"
+                              class="form-control"
+                              name="description"
+                              value="<%=lightdetail.description%>"
+                              maxlength="600"
+                              
+
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div class="mb-1 row">
+                          <div class="col-sm-2">
+                            <label class="col-form-label new_lable" for="name"
+                              >Product Description (In Arabic)</label
+                            >
+                          </div>
+                          <div class="col-sm-10">
+                            <input
+                              type="text"
+                              id="name"
+                              class="form-control"
+                              name="descriptionArabic"
+                            
+                              value="<%=lightdetail.descriptionArabic%>"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div class="mb-1 row">
+                          <div class="col-sm-2">
+                            <label class="col-form-label new_lable" for="name">Product Brand Name</label>
+                          </div>
+                          <div class="col-sm-10">
+                            <select id="BrandID" class="form-control" name="BrandID" >
+                             
+                              <% Brand.forEach(function(cat) { %>
+                                <option value="<%= cat._id %>" <%= cat.Brandname=== lightdetail.Brandname ? "selected" : "" %>>
+                                  <%= cat.Brandname %>
+                                </option>
+                              <% }) %>
+                            </select>
+                          </div>
+                        </div>
+                        
+<!-- 
+                        <div class="mb-1 row">
+                          <div class="col-sm-2">
+                            <label class="col-form-label new_lable" for="name"
+                              >Price</label
+                            >
+                          </div> -->
+                          <!-- <div class="input-group" style="width: 83%">
+                            <span class="input-group-text" id="basic-addon1"
+                              >$</span
+                            >
+                            <input
+                              type="number"
+                              id="price"
+                              class="form-control"
+                              name="price"
+                              placeholder="Enter Price"
+                              value="<%=lightdetail.price%>"
+                              ria-describedby="basic-addon1"
+                              required
+                            />
+                          </div>
+                        </div> -->
+
+                        <!-- <div class="mb-1 row">
+                          <div class="col-sm-2">
+                            <label class="col-form-label new_lable" for="productUnitId">Product Unit</label>
+                          </div>
+                        
+                          <select
+                          id="ProdiuctUnit"
+                          class="form-control"
+                          name="productUnitId"
+                          required
+                        >
+                          <option value=""><%=lightdetail.productUnitName%></option>
+                          <% Productunit.forEach(function(cat) { %>
+                            <option
+                              value="<%= cat._id %>"
+                              <%= cat._id.toString() === lightdetail.productUnitId?.toString() ? "selected" : "" %>
+                            >
+                              <%= cat.ProdiuctUnit %>
+                            </option>
+                          <% }) %>
+                        </select>
+                        </div> -->
+
+                        <div class="mb-1 row">
+                          <div class="col-sm-2">
+                            <label class="col-form-label new_lable" for="productUnitId">Product Unit</label>
+                          </div>
+                          <div class="col-sm-10">
+                            <select
+                            id="productUnitId"
+                            class="form-control"
+                            name="productUnitId"
+                            required
+                            
+                          >
+                         
+
+                            <option value="">Select</option>
+                            <% Productunit.forEach(function(cat) { %>
+                              <option
+                                value="<%= cat._id %>"
+                                <%= cat.ProdiuctUnit === lightdetail.productUnitName ? "selected" : "" %>
+                              >
+
+                              
+                                <%= cat.ProdiuctUnit %>
+                              </option>
+                            <% }) %>
+                          </select>
+                          </div>
+                        </div>
+
+
+<!-- 
+                        <div class="mb-1 row">
+                          <div class="col-sm-2">
+                            <label class="col-form-label new_lable" for="name"
+                              >Product Unit</label
+                            >
+                          </div>
+                          <div class="col-sm-10">
+                            <input
+                            type="text"
+                            id="productUnitId"
+                            class="form-control"
+                           
+                            value="<%=lightdetail.productUnitName%>"
+                            maxlength="60"
+                            readonly
+                            
+                          />
+                
+                          </div>
+                        </div> -->
+                        <div class="mb-1 row">
+                          <div class="col-sm-2">
+                            <label
+                              class="col-form-label new_lable"
+                              for="productUnit"
+                              >BarCode</label
+                            >
+                          </div>
+                          <div class="col-sm-10">
+                            <input
+                              type="text"
+                              id="BarCode"
+                              class="form-control"
+                              name="BarCode"
+                              value="<%= lightdetail.BarCode %>"
+                              maxlength="60"
+                              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                              
+                              
+                            />
+                          </div>
+                        </div>
+
+                        <h4 class="card-title">Retail Stores</h4>
+               
+                        
+
+                          <div id="storeContainer">
+                            <% let selectedStores = []; %>
+                            <% lightdetail?.product?.forEach((product, index) => { %>
+                              <% selectedStores?.push(product?.shopName?._id?.toString()); %>
+                              <div class="store-item" id="storeItem-<%= index %>">
+                                <div class="mb-1 row">
+                                  <div class="col-sm-2">
+                                    <label class="col-form-label new_lable">Store Name</label>
+                                  </div>
+                                  <div class="col-sm-10">
+                                    <select class="form-control storeSelect" name="product[<%= index %>][shopName]" required onchange="updateDisabledStores()">
+                                      <option value="">Select Store</option>
+                                      <% store?.forEach(function(store) { %>
+                                        <option value="<%= store?._id %>" 
+                                          <%= store._id?.toString() === product?.shopName?._id?.toString() ? 'selected' : (selectedStores.includes(store._id.toString()) ? 'disabled' : '') %>>
+                                          <%= store?.name %>
+                                        </option>
+                                      <% }) %>
+                                    </select>
+                                  </div>
+                                </div>
+                          
+                                <div class="mb-1 row">
+                                  <div class="col-sm-2">
+                                    <label class="col-form-label new_lable">Price</label>
+                                  </div>
+                                  <div class="col-sm-10">
+                                    <input type="number" class="form-control" name="product[<%= index %>][price]" value="<%= product.price %>" required />
+                                    <input type="hidden" name="product[<%= index %>][_id]" value="<%= product._id %>" />
+                                  </div>
+                                </div>
+                          
+                                <div class="mb-1 row">
+                                  <div class="col-sm-2">
+                                    <label class="col-form-label new_lable">Location</label>
+                                  </div>
+                                  <div class="col-sm-10">
+                                    <select class="form-control" name="product[<%= index %>][Location]" required>
+                                      <option value="">Select Location</option>
+                                      <option value="Riyadh" <%= product.Location === 'Riyadh' ? 'selected' : '' %>>Riyadh</option>
+                                      <option value="Jeddah" <%= product.Location === 'Jeddah' ? 'selected' : '' %>>Jeddah</option>
+                                      <option value="Dammam" <%= product.Location === 'Dammam' ? 'selected' : '' %>>Dammam</option>
+                                    </select>
+                                  </div>
+                                </div>
+                          
+                                <div class="mb-1 row">
+                                  <div class="col-sm-2">
+                                    <label class="col-form-label new_lable">Date</label>
+                                  </div>
+                                  <div class="col-sm-10">
+                                    <input
+                                      type="date"
+                                      class="form-control"
+                                      name="product[<%= index %>][date]"
+                                      value="<%= product.date ? new Date(product.date).toISOString().split('T')[0] : '' %>"
+                                      max="<%= new Date().toISOString().split('T')[0] %>"
+                                      required
+                                    />
+                                  </div>
+                                </div>
+  <!--                         
+                                <div class="text-end mb-1">
+                                  <button type="button" class="btn btn-danger btn-sm" onclick="removeStore(<%= index %>)">Remove</button>
+                                </div> -->
+                          
+                                <hr />
+                              </div>
+                            <% }) %>
+                          </div>
+                   
+                        <!-- Add More Button -->
+                        <div class="row">
+                          <div class="col-12 text-end">
+                            <button type="button" id="addMoreStore" class="btn btn-secondary">Add More Store</button>
+                            
+                            <button type="submit" class="btn btn-primary">Update</button>
+                          </div>
+                        </div>
+                        
+                  
+                
+                    
+                  </form>
+
+
+
+
+
+
+
+
+
+
+
+                  <!-- Spinner for Loading -->
+
+                  <div
+                  class="modal fade"
+                  id="loadingModal"
+                  tabindex="-1"
+                  aria-labelledby="loadingModalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-body text-center">
+                        <div class="spinner"></div>
+                        <p>Processing your data. Please wait...</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <div class="sidenav-overlay"></div>
+  <div class="drag-target"></div>
+
+  <%- include('../common/footer'); -%>
+ 
+ <!-- Add SweetAlert2 CSS in the head section -->
+<link
+href="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.9/dist/sweetalert2.min.css"
+rel="stylesheet"
+/>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- <script>
+  $(document).ready(function () {
+      var $wrapper = $(".multi-fields");
+  
+      $(".add-field").click(function () {
+          if ($wrapper.is(":hidden")) {
+              $wrapper.show();
+          }
+  
+          var $clone = $(".multi-field:first", $wrapper).clone(true);
+          $clone.find("input, select").val(""); // Reset inputs
+          $clone.find(".remove-field").show(); // Show remove button for new fields
+          $wrapper.append($clone);
+      });
+  
+      $wrapper.on("click", ".remove-field", function () {
+          $(this).closest(".multi-field").remove();
+  
+          if ($(".multi-field", $wrapper).length === 1) {
+              $(".remove-field", $wrapper).hide(); // Hide remove button if only one field remains
+          }
+  
+          if ($(".multi-field", $wrapper).length === 0) {
+              $wrapper.hide(); // Hide container when all fields are removed
+          }
+      });
+  
+      $("#profile").submit(function (event) {
+          event.preventDefault();
+  
+          let storeData = [];
+          $(".multi-field").each(function () {
+              let shopName = $(this).find('select[name="shopName[]"]').val();
+              let price = $(this).find('input[name="price[]"]').val().trim();
+              let location = $(this).find('select[name="Location[]"]').val();
+              let date = $(this).find('input[name="date[]"]').val();
+  
+              if (shopName && price && location && date) {
+                  storeData.push({ shopName, price: parseFloat(price), location, date });
+              }
+          });
+  
+  
+          let storeDataInput = $("<input>").attr({ type: "hidden", name: "storeData", value: JSON.stringify(storeData) });
+  
+          $("input[name='storeData']").remove();
+          $(this).append(storeDataInput);
+          console.log("Submitting storeData:", storeDataInput.val()); 
+          this.submit();
+      });
+  });
+  </script> -->
+
+
+
+
+
+
+
+<!-- Add SweetAlert2 JS at the bottom before closing </body> tag -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.9/dist/sweetalert2.min.js"></script>
+
+ <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"
+    integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  >
+
+
+</script>
+
+
+
+
+
+  <script>
+    // Custom validation method to ensure no spaces in the input
+    $.validator.addMethod("noSpace", function (value, element) {
+      return value.trim() !== "";
+    }, "This field cannot have leading or trailing spaces.");
+    $.validator.addMethod(
+      "noNumbers",
+      function (value, element) {
+        return !/\d/.test(value); // returns false if any number is found
+      },
+      "Numbers are not allowed"
+    );
+    // Form validation and AJAX submission
+    $("#profile").validate({
+      rules: {
+        categoryNames: {
+          required: true,
+          noSpace: true,
+        },
+        name: {
+          required: true,
+          noSpace: true,
+        },
+        nameArabic: {
+          required: true,
+          noSpace: true,
+        },
+        description: {
+          required: true,
+          noSpace: true,
+      
+        },
+        descriptionArabic: {
+          required: true,
+          noSpace: true,
+        
+        },
+        BarCode: {
+      minlength: 1,
+      maxlength:40,
+      remote: {
+        url: "/edit/check-barcode?id=<%=lightdetail._id%>",
+        // type: "POST",
+        data: {
+          BarCode: function () {
+            return $("#BarCode").val();
+          },
+        },
+        dataFilter: function (response) {
+          if (response === "true") {
+            isBarcodeValid = true; // Valid barcode
+            return true;
+          } else {
+            isBarcodeValid = false; // Barcode already exists
+            return false;
+          }
+        },
+      },
+    },
+
+ 
+       
+      },
+      messages: {
+        categoryNames: "Category Name is required",
+        name: "Product Name is required",
+        nameArabic: "Product Name (Arabic) is required",
+        description: "Description is required",
+        descriptionArabic: "Description (Arabic) is required",
+        BarCode: {
+      maxlength: "Barcode must be exactly 40 characters.",
+      remote: "Barcode Already exist"
+    },
+
+   
+ 
+      },
+
+
+  errorElement: "div",
+  errorClass: "jqval-error",
+  errorPlacement: function (error, element) {
+    error.insertAfter(element);
+    error.slideDown(400);
+    error.animate(
+      {
+        opacity: 1,
+      },
+      {
+        queue: false,
+        duration: 700,
+      }
+    );
+    error.css("color", "red");
+  },
+
+  submitHandler: function (form) {
+    // Show the loading spinner modal
+    $('#loadingModal').modal('show');
+    $("body").css("overflow", "hidden");
+
+    $.ajax({
+        url: form.action,
+        method: form.method,
+        data: new FormData(form),
+        processData: false,
+        contentType: false,
+        success: function () {
+            // Hide loading modal and reset overflow on success
+            $('#loadingModal').modal('hide');
+            $("body").css("overflow", "auto");
+
+            // Redirect to subcategory list
+            window.location.href = "/SubCategoryList";
+        },
+        error: function (xhr) {
+            // Hide loading modal and reset overflow on error
+            $('#loadingModal').modal('hide');
+            $("body").css("overflow", "auto");
+
+            let errorMessage = 'An unexpected error occurred.';
+            try {
+                const response = JSON.parse(xhr.responseText);
+                if (response.error) {
+                    errorMessage = response.error;
+                }
+            } catch (e) {
+                console.error("Error parsing response:", e);
+            }
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonText: 'OK',
+            }).then(() => {
+                location.reload();
+            });
+        }
+    });
+}
+
+});
+
+</script>
+
+  <script>
+    $(window).on("load", function () {
+      if (feather) {
+        feather.replace({
+          width: 14,
+          height: 14,
+        });
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+    function loadFile(event, c) {
+      var image = document.getElementById(c);
+      image.src = URL.createObjectURL(event.target.files[0]);
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <script>
+  document.getElementById("addMoreStore").addEventListener("click", function () {
+    const storeContainer = document.getElementById("storeContainer");
+    const index = storeContainer.children.length;
+
+    // Get store dropdown options
+    const storeOptions = `
+      <option value="">Select Store</option>
+      <% store.forEach(function(store) { %>
+        <option value="<%= store._id %>"><%= store.name %></option>
+      <% }) %>
+    `;
+
+    const newStore = `
+      <div class="store-item" id="storeItem-${index}">
+        <div class="mb-1 row">
+          <div class="col-sm-2">
+            <label class="col-form-label new_lable">Store Name</label>
+          </div>
+          <div class="col-sm-10">
+            <select class="form-control" name="product[${index}][shopName]" required>
+              ${storeOptions}
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-1 row">
+          <div class="col-sm-2">
+            <label class="col-form-label new_lable">Price</label>
+          </div>
+          <div class="col-sm-10">
+            <input type="number" class="form-control" name="product[${index}][price]" required />
+          </div>
+        </div>
+
+        <div class="mb-1 row">
+          <div class="col-sm-2">
+            <label class="col-form-label new_lable">Location</label>
+          </div>
+          <div class="col-sm-10">
+            <select class="form-control" name="product[${index}][Location]" required>
+              <option value="">Select Location</option>
+              <option value="Riyadh">Riyadh</option>
+              <option value="Jeddah">Jeddah</option>
+              <option value="Dammam">Dammam</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-1 row">
+          <div class="col-sm-2">
+            <label class="col-form-label new_lable">Date</label>
+          </div>
+          <div class="col-sm-10">
+            <input type="date" class="form-control" name="product[${index}][date]" max="<%= new Date().toISOString().split('T')[0] %>" required />
+          </div>
+        </div>
+
+        <div class="text-end mb-1">
+          <button type="button" class="btn btn-danger btn-sm" onclick="removeStore(${index})">Remove</button>
+        </div>
+
+        <hr />
+      </div>
+    `;
+
+    storeContainer.insertAdjacentHTML("beforeend", newStore);
+  });
+
+  // Remove Store Item
+  function removeStore(index) {
+    const storeItem = document.getElementById(`storeItem-${index}`);
+    if (storeItem) {
+      storeItem.remove();
+    }
+  }
+</script> -->
+
+<script>
+  // Track selected stores from initial load
+  let selectedStores = "<%= JSON.stringify(lightdetail?.product?.map(product => product?.shopName?._id?.toString())) %>";
+
+  document.getElementById("addMoreStore").addEventListener("click", function () {
+    const storeContainer = document.getElementById("storeContainer");
+    const index = storeContainer.children.length;
+
+    // Get store dropdown options with updated selected stores disabled
+    const storeOptions = getStoreOptions();
+
+    const newStore = `
+      <div class="store-item" id="storeItem-${index}">
+        <div class="mb-1 row">
+          <div class="col-sm-2">
+            <label class="col-form-label new_lable">Store Name</label>
+          </div>
+          <div class="col-sm-10">
+            <select class="form-control storeSelect" name="product[${index}][shopName]" required onchange="updateDisabledStores()">
+              ${storeOptions}
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-1 row">
+          <div class="col-sm-2">
+            <label class="col-form-label new_lable">Price</label>
+          </div>
+          <div class="col-sm-10">
+            <input type="number" class="form-control" name="product[${index}][price]" required />
+          </div>
+        </div>
+
+        <div class="mb-1 row">
+          <div class="col-sm-2">
+            <label class="col-form-label new_lable">Location</label>
+          </div>
+          <div class="col-sm-10">
+            <select class="form-control" name="product[${index}][Location]" required>
+              <option value="">Select Location</option>
+              <option value="Riyadh">Riyadh</option>
+              <option value="Jeddah">Jeddah</option>
+              <option value="Dammam">Dammam</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-1 row">
+          <div class="col-sm-2">
+            <label class="col-form-label new_lable">Date</label>
+          </div>
+          <div class="col-sm-10">
+            <input type="date" class="form-control" name="product[${index}][date]" max="<%= new Date().toISOString().split('T')[0] %>" required />
+          </div>
+        </div>
+
+        <div class="text-end mb-1">
+          <button type="button" class="btn btn-danger btn-sm" onclick="removeStore(${index})">Remove</button>
+        </div>
+
+        <hr />
+      </div>
+    `;
+
+    storeContainer.insertAdjacentHTML("beforeend", newStore);
+    updateDisabledStores();
+  });
+
+  // Get available store options with selected stores disabled
+  function getStoreOptions() {
+    const selectedStores = getSelectedStores();
+    let storeOptions = `
+      <option value="">Select Store</option>
+      <% store.forEach(function(store) { %>
+        <option value="<%= store._id %>" 
+          ${selectedStores.includes('<%= store._id.toString() %>') ? 'disabled' : ''}><%= store.name %></option>
+      <% }) %>
+    `;
+    return storeOptions;
+  }
+
+  // Get selected store values
+  function getSelectedStores() {
+    let selectedStores = [];
+    document.querySelectorAll(".storeSelect").forEach((select) => {
+      if (select.value) {
+        selectedStores.push(select.value);
+      }
+    });
+    return selectedStores;
+  }
+
+  // Update disabled stores dynamically after selecting/removing a store
+  function updateDisabledStores() {
+    const selectedStores = getSelectedStores();
+    document.querySelectorAll(".storeSelect").forEach((select) => {
+      const currentValue = select.value;
+      for (let i = 0; i < select.options.length; i++) {
+        const option = select.options[i];
+        if (option.value && option.value !== currentValue) {
+          option.disabled = selectedStores.includes(option.value);
+        }
+      }
+    });
+  }
+
+  // Remove Store Item and re-enable disabled stores
+  function removeStore(index) {
+    const storeItem = document.getElementById(`storeItem-${index}`);
+    if (storeItem) {
+      storeItem.remove();
+      updateDisabledStores();
+    }
+  }
+
+  // Initial call to disable stores on page load
+  document.addEventListener("DOMContentLoaded", function () {
+    updateDisabledStores();
+  });
+</script>
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+
+
+<!-- <script>
+
+document.getElementById("profile").addEventListener("submit", function (event) {
+  event.preventDefault(); // Prevent default form submission
+
+  let storeData = [];
+  document.querySelectorAll(".multi-field").forEach((field) => {
+    let shopName = field.querySelector('select[name="shopName"]').value;
+    let price = field.querySelector('input[name="price"]').value.trim();
+    let Location = field.querySelector('select[name="Location"]').value;
+    let date = field.querySelector('input[name="date"]').value;
+
+    if (shopName && price && Location && date) {
+      storeData.push({ shopName, price, Location, date });
+    }
+  });
+
+  // Create a hidden input to send store data as JSON
+  let storeDataInput = document.createElement("input");
+  storeDataInput.type = "hidden";
+  storeDataInput.name = "storeData";
+  storeDataInput.value = JSON.stringify(storeData);
+  
+  this.appendChild(storeDataInput);
+  this.submit(); // Submit the form with the extra data
+});
+
+  </script> -->
+
+
+
+  <script>
+    let cropper;
+    let imageFile;
+  
+    // Function to load and preview image
+    function loadFile(event) {
+      imageFile = event.target.files[0];
+  
+      if (imageFile) {
+        let reader = new FileReader();
+        reader.onload = function () {
+          let imageUrl = reader.result;
+          document.getElementById("imagePreview").src = imageUrl;
+          document.getElementById("cropModal").style.display = "block";
+  
+          // Destroy previous cropper instance if it exists
+          if (cropper) {
+            cropper.destroy();
+          }
+  
+          // Initialize a new cropper instance
+          cropper = new Cropper(document.getElementById("imagePreview"), {
+            aspectRatio: NaN, // Allow free selection (or change to fixed ratio like 16/9 if needed)
+            viewMode: 1, // Crop inside the boundary
+            autoCropArea: 0.8, // Initial cropping area (80%)
+            movable: true,
+            zoomable: true,
+            rotatable: true,
+            cropBoxResizable: true,
+            minCropBoxWidth: 100, // Minimum width of crop box
+            minCropBoxHeight: 100, // Minimum height of crop box
+          });
+        };
+        reader.readAsDataURL(imageFile);
+      }
+    }
+  
+    // Close modal when clicking on "X"
+    document.getElementById("closeModal").addEventListener("click", function () {
+      document.getElementById("cropModal").style.display = "none";
+  
+      // Destroy cropper when modal is closed
+      if (cropper) {
+        cropper.destroy();
+        cropper = null;
+      }
+    });
+  
+    // Crop and get cropped image with fixed width and height
+    document.getElementById("cropImage").addEventListener("click", function () {
+      if (cropper) {
+        // Set fixed width and height for the cropped image
+        let canvas = cropper.getCroppedCanvas({
+          width: 300, // Fixed width (adjust as needed)
+          height: 300, // Fixed height (adjust as needed)
+        });
+  
+        if (canvas) {
+          let croppedImage = canvas.toDataURL("image/jpeg"); // Get cropped image in JPEG
+  
+          // Assign cropped image to hidden input and image preview
+          document.getElementById("croppedImage").value = croppedImage;
+          document.getElementById("output2").src = croppedImage;
+  
+          // Hide modal after cropping
+          document.getElementById("cropModal").style.display = "none";
+  
+          // Destroy cropper after cropping to reset for next use
+          cropper.destroy();
+          cropper = null;
+        }
+      }
+    });
+  </script>
+  
+  
+
+
+
+<!-- <script>
+  let cropper;
+  let imageFile;
+
+  function loadFile(event) {
+    imageFile = event.target.files[0];
+    if (imageFile) {
+      let reader = new FileReader();
+      reader.onload = function () {
+        let imageUrl = reader.result;
+        document.getElementById("imagePreview").src = imageUrl;
+        document.getElementById("cropModal").style.display = "block";
+
+        if (cropper) {
+          cropper.destroy();
+        }
+        
+        cropper = new Cropper(document.getElementById("imagePreview"), {
+          aspectRatio: 16 / 9,
+          viewMode: 1,
+          autoCropArea: 1,
+        });
+      };
+      reader.readAsDataURL(imageFile);
+    }
+  }
+
+  document.getElementById("closeModal").addEventListener("click", function () {
+    document.getElementById("cropModal").style.display = "none";
+  });
+
+  document.getElementById("cropImage").addEventListener("click", function () {
+    let canvas = cropper.getCroppedCanvas();
+    let croppedImage = canvas.toDataURL("image/jpeg");
+    document.getElementById("croppedImage").value = croppedImage;
+    document.getElementById("output2").src = croppedImage;
+    document.getElementById("cropModal").style.display = "none";
+  });
+</script>
+
+
+<!-- Hidden field for cropped image -->
+ -->
+<style>
+ /* Spinner Styling */
+.spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1.5s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Hide the spinner by default */
+#loadingModal {
+  display: none;
+}
+
+/* Optional: Add custom styles for modal content, you can adjust as needed */
+.modal-content {
+  border-radius: 8px;
+  padding: 20px;
+}
+</style>
+</body>

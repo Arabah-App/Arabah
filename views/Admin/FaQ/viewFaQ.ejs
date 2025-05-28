@@ -1,0 +1,52 @@
+<%- include('../common/header') %>
+<%- include('../common/sidebar') %>
+
+
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <section id="multiple-column-form">
+        <div class="row justify-content-center">
+          <div class=" row ">
+            <div class="card">
+              <div class="card-header border-bottom">
+                <h4 class="card-title">FAQ View</h4>
+              </div>
+              <br>
+              <div class="card-body">
+                <form class="form form-vertical" id="" action="/contactUsList" method="POST" enctype="multipart/form-data">
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="name">Question</label>
+                    </div>
+                    <div class="col-sm-10">
+                      <input type="text" id="name" class="form-control" name="name" value="<%=goalView?.question%> " disabled>
+                    </div>
+                  </div>
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="name">Answer</label>
+                    </div>
+                    <div class="col-sm-10">
+                      <textarea class="form-control" id="content" rows="5" name="description" disabled> <%=goalView?.answer%>  </textarea>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 text-end">
+                      <a href="/FaQList" class="btn btn-primary float-right" title="Edit Profile"> Back </a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<%- include('../common/footer') %>

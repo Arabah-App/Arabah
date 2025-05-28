@@ -1,0 +1,1291 @@
+<%- include('../common/header') %> <%- include('../common/sidebar') %>
+<!-- BEGIN: Content-->
+
+<style>
+  /* Style for the modal */
+  #cropModal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed position */
+    z-index: 1000; /* Make sure the modal is on top */
+    top: 0; /* Position from top */
+    left: 0; /* Position from left */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    overflow: auto; /* Allow scrolling if content overflows */
+    padding-top: 100px; /* Space from the top */
+  }
+
+  /* Modal content */
+  .modal-content {
+    background-color: white;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Width of the modal */
+    max-width: 600px; /* Maximum width */
+    border-radius: 10px; /* Rounded corners */
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Close button */
+  .close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Heading style */
+  .modal-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+
+  /* Button style */
+  #cropImage {
+    display: block;
+    width: 100%;
+    background-color: #4caf50; /* Green background */
+    color: white;
+    padding: 15px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+  }
+  .cropper-container.cropper-bg {
+    width: 100% !important;
+    height: 550px !important;
+    overflow: hidden;
+}
+
+  #cropImage:hover {
+    background-color: #45a049; /* Darker green on hover */
+  }
+
+  /* Image preview styling */
+  #imagePreview {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    object-fit: cover; /* Ensure the image covers the area */
+  }
+</style>
+<div class="app-content content">
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <section id="multiple-column-form">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header border-bottom">
+                <h4 class="card-title">Add Product</h4>
+                <div class="section-header-breadcrumb-right">
+                  <a
+                    href="/addBulk_product"
+                    class="btn btn-primary float-right"
+                    title="Edit Profile"
+                  >
+                    Add Bulk Product
+                  </a>
+                </div>
+              </div>
+              <br />
+              <div class="card-body">
+                <form
+                  class="form form-vertical"
+                  action="/lightCreate"
+                  method="POST"
+                  id="profile"
+                  enctype="multipart/form-data"
+                >
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="category"
+                        >Category Name</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <select
+                        id="categoryNames"
+                        class="form-control"
+                        name="categoryNames"
+                        required
+                      >
+                        <option value="">Select Category</option>
+                        <% category.forEach(function(cat) { %>
+                        <option value="<%= cat._id %>">
+                          <%= cat.categoryName %>
+                        </option>
+                        <% }) %>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="name"
+                        >Product Name</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        id="name"
+                        class="form-control"
+                        name="name"
+                        placeholder="Enter Name"
+                        value=""
+                        onkeydown="return (this.value.length === 0 && event.key === ' ' ? false : /[a-zA-Z\s]/.test(event.key))"
+
+                        required
+                      />
+                    </div>
+                  </div>
+              
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="name"
+                        >Product Name(In Arabic)</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        id="name"
+                        class="form-control"
+                        name="nameArabic"
+                        placeholder="Enter Name"
+                        value=""
+                        onkeydown="return (this.value.length === 0 && event.key === ' ' ? false : /[a-zA-Z\s]/.test(event.key))"
+
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="name"
+                        >Product Description</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        id="description"
+                        class="form-control"
+                        name="description"
+                        placeholder="Enter Description"
+                        onkeydown="return (this.value.length === 0 && event.key === ' ' ? false : /[a-zA-Z\s]/.test(event.key))"
+
+                        value=""
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="name"
+                        >Product Description(In Arabic)</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        id="description"
+                        class="form-control"
+                        name="descriptionArabic"
+                        placeholder="Enter Description"
+                        onkeydown="return (this.value.length === 0 && event.key === ' ' ? false : /[a-zA-Z\s]/.test(event.key))"
+
+                        value=""
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="name"
+                        >Product Brand </label
+                      >
+                    </div>
+                    <!-- <div class="col-sm-10">
+                      <input
+                        type="text"
+                        id="description"
+                        class="form-control"
+                        name="Brandname"
+                        placeholder="Enter Product Brand Name"
+                        value=""
+                        required
+                      />
+                    </div> -->
+                    <div class="col-sm-10">
+                      <select
+                        id="Brandname"
+                        class="form-control"
+                        name="Brandname"
+                        required
+                      >
+                        <option value="">Select Brand</option>
+                        <% Brand.forEach(function(cat) { %>
+                        <option value="<%= cat._id %>">
+                          <%= cat.Brandname %>
+                        </option>
+                        <% }) %>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="name">price</label>
+                    </div>
+                    <div class="input-group" style="width:83%;">
+                      <span class="input-group-text" id="basic-addon1">$</span>
+                      <input type="number" id="price" class="form-control" name="price" placeholder="Enter Price" value="" ria-describedby="basic-addon1" required>
+                    </div>
+                  </div> -->
+
+                  <div class="mb-1 row" style="visibility: hidden">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="name"
+                        >Price</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <input
+                        type="number"
+                        id="price"
+                        class="form-control"
+                        name="price"
+                        placeholder="Enter Price"
+                        value="10"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="ProdiuctUnit"
+                        >Prodiuct Unit</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <!-- <input
+                        type="text"
+                        id="ProdiuctUnit"
+                        class="form-control"
+                        name="ProdiuctUnit"
+                        placeholder="Enter Prodiuct Unit kg/ml/pound"
+                        value=""
+                        required
+                      /> -->
+                      <select
+                      id="ProdiuctUnit"
+                      class="form-control"
+                      name="productUnitId"
+                      required
+                    >
+                      <option value="">Select Productunit</option>
+                      <% Productunit.forEach(function(cat) { %>
+                      <option value="<%= cat._id %>">
+                        <%= cat.ProdiuctUnit %>
+                      </option>
+                      <% }) %>
+                    </select>
+                    </div>
+                  </div>
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="ProdiuctUnit"
+                        >BarCode</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        id="BarCode"
+                        class="form-control"
+                        name="BarCode"
+                        placeholder="Enter BarCode"
+                        value=""
+                        
+                      />
+                    </div>
+                  </div>
+
+
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="price"
+                        >Image</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <input
+                        type="file"
+                        id="image"
+                        class="form-control"
+                        name="image"
+                        value=""
+                        required
+                      />
+                    </div>
+                  </div>
+                  <input type="hidden" id="croppedImage" name="croppedImage" />
+                  <div id="cropModal" class="modal">
+                    <div class="modal-content">
+                      <span id="closeModal" class="close">&times;</span>
+                      <h2>Crop Image</h2>
+                      <img id="imagePreview" src="" alt="Image to crop" />
+                      <button type="button" id="cropImage">Crop</button>
+                    </div>
+                  </div>
+                  <hr />
+                  <div class="card-header border-bottom">
+                    <h4 class="card-title">Retail Stores</h4>
+                  </div>
+                  <div id="storeContainer"></div>
+                  <!-- Template for new quantity and size fields -->
+                  <div id="fieldsTemplate" style="display: none">
+                    <div class="field-group">
+                      <!-- Add this wrapper around the whole fieldset -->
+                      <div class="mb-1 row">
+                        <div class="col-sm-2">
+                          <label class="col-form-label new_lable" for="shopName"
+                            >Store Name</label
+                          >
+                        </div>
+                        <div class="col-sm-10">
+                          <select
+                            id="shopName"
+                            class="form-control"
+                            name="shopName[]"
+                            required
+                          >
+                            <option value="">Select Store</option>
+                            <% store.forEach(function(store) { %>
+                            <option value="<%= store._id %>">
+                              <%= store.name %>
+                            </option>
+                            <% }) %>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-1 row">
+                        <div class="col-sm-2">
+                          <label class="col-form-label new_lable" for="price"
+                            >Price</label
+                          >
+                        </div>
+                        <div class="col-sm-10">
+                          <input
+                            type="number"
+                            class="form-control"
+                            name="price[]"
+                            placeholder="Enter price"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div class="mb-1 row">
+                        <div class="col-sm-2">
+                          <label class="col-form-label new_lable" for="Location"
+                            >Location</label
+                          >
+                        </div>
+           
+                        <div class="col-sm-10">
+                          <select
+                            id="Location"
+                            class="form-control"
+                            name="Location[]"
+                            required
+                          >
+                            <option value="">Select Location</option>
+
+                            <option value="Riyadh">Riyadh</option>
+                            <option value="Jeddah">Jeddah</option>
+                            <option value="Dammam">Dammam</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-1 row">
+                        <div class="col-sm-2">
+                          <label class="col-form-label new_lable" for="date"
+                            >Date</label
+                          >
+                        </div>
+                        <div class="col-sm-10">
+                          <input
+                            type="date"
+                            class="form-control"
+                            name="date[]"
+                             max="<%= new Date().toISOString().split('T')[0] %>"
+                            placeholder="Enter date"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <!-- <div class="mb-1 row">
+                        <div
+                          class="col-sm-10 ms-auto justify-content-end d-flex align-items-end"
+                        >
+                          <button
+                            type="button"
+                            class="btn btn-danger remove-field"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div> -->
+                    </div>
+                    <!-- End of field-group -->
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 text-end">
+                      <button
+                        type="button"
+                        id="addMoreFields"
+                        class="btn btn-secondary"
+                      >
+                        Add Store
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light"
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </form>
+                <div
+                  class="modal fade"
+                  id="loadingModal"
+                  tabindex="-1"
+                  aria-labelledby="loadingModalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-body text-center">
+                        <div class="spinner"></div>
+                        <p>Processing your data. Please wait...</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<%- include('../common/footer') %>
+
+<style>
+  .spinner {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1.5s linear infinite;
+    margin: 0 auto;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>
+
+<!-- <script>
+  $(document).ready(function () {
+    // Add event listener to the "Add" button
+    $("form").submit(function (event) {
+      var form = $(this);
+
+      // Show the loader when the form is submitted
+      $("#loadingModal").modal("show");
+
+      // Simulate form processing (for demonstration purposes)
+      setTimeout(function () {
+        form.submit(); // Continue the form submission after the loader is shown
+      }, 2000); // This simulates a delay of 2 seconds, you can adjust this as needed
+    });
+  });
+</script> -->
+<script>
+  setTimeout(function () {
+    $("div.msg").fadeOut();
+  }, 2000);
+
+  // $(document).ready(function () {
+  //   // Add the first set of fields when the page loads
+  //   var initialFields = $("#fieldsTemplate").clone().removeAttr("id").show();
+  //   $("#additionalFieldsContainer").append(initialFields);
+
+  //   // Add more fields when "Add Size" button is clicked
+  //   $("#addMoreFields").click(function () {
+  //     var newFields = $("#fieldsTemplate").clone().removeAttr("id").show();
+  //     $("#additionalFieldsContainer").append(newFields);
+
+  //     updateShopOptions();
+  //   });
+
+  //   $("#additionalFieldsContainer").on("click", ".remove-field", function () {
+  //     var removedField = $(this).closest(".field-group");
+
+  //     enableShopsInDropdown(removedField);
+  //     removedField.remove();
+
+  //     updateShopOptions();
+  //   });
+
+  //   function updateShopOptions() {
+  //     var selectedShops = [];
+
+  //     $("#additionalFieldsContainer select#shopName").each(function () {
+  //       if ($(this).val()) {
+  //         selectedShops.push($(this).val());
+  //       }
+  //     });
+
+  //     // Loop through all dropdowns and disable the selected shops
+  //     $("#additionalFieldsContainer select#shopName").each(function () {
+  //       var currentSelect = $(this);
+  //       currentSelect.find("option").each(function () {
+  //         if (selectedShops.includes($(this).val())) {
+  //           $(this).prop("disabled", true);
+  //         } else {
+  //           $(this).prop("disabled", false);
+  //         }
+  //       });
+  //     });
+  //   }
+
+  //   // Enable the shop option in the dropdown if a field is removed
+  //   function enableShopsInDropdown(removedField) {
+  //     removedField.find("select#shopName option").each(function () {
+  //       $(this).prop("disabled", false); // Enable all options again
+  //     });
+  //   }
+  // });
+  $(document).ready(function () {
+
+  var initialFields = $("#fieldsTemplate").clone().removeAttr("id").show();
+  initialFields.find(".remove-field").remove(); 
+  $("#additionalFieldsContainer").append(initialFields);
+
+
+  $("#addMoreFields").click(function () {
+    var newFields = $("#fieldsTemplate").clone().removeAttr("id").show();
+
+  
+    var removeButton = `
+      <div class="mb-1 row remove-btn-container">
+        <div class="col-sm-10 ms-auto justify-content-end d-flex align-items-end">
+          <button type="button" class="btn btn-danger remove-field">Remove</button>
+        </div>
+      </div>
+    `;
+    
+  
+    newFields.find(".field-group").append(removeButton);
+
+    $("#additionalFieldsContainer").append(newFields);
+
+    updateShopOptions();
+  });
+
+  // Handle remove field button click (corrected with event delegation)
+  $("#additionalFieldsContainer").on("click", ".remove-field", function () {
+    var removedField = $(this).closest(".field-group"); // Get parent field-group
+    enableShopsInDropdown(removedField); // Enable shop on removal
+    removedField.remove(); // Remove the field group
+
+    updateShopOptions(); // Update shop options after removing a field
+  });
+
+
+  function updateShopOptions() {
+    var selectedShops = [];
+
+    // Get all selected shop values
+    $("#additionalFieldsContainer select[name='shopName[]']").each(function () {
+      if ($(this).val()) {
+        selectedShops.push($(this).val());
+      }
+    });
+
+    // Loop through all dropdowns and disable the selected shops
+    $("#additionalFieldsContainer select[name='shopName[]']").each(function () {
+      var currentSelect = $(this);
+      var currentValue = currentSelect.val();
+
+      currentSelect.find("option").each(function () {
+        var optionValue = $(this).val();
+        // Check if the option is selected in another dropdown
+        if (selectedShops.includes(optionValue) && optionValue !== currentValue) {
+          $(this).prop("disabled", true);
+        } else {
+          $(this).prop("disabled", false);
+        }
+      });
+    });
+  }
+
+  // Enable the shop option in the dropdown if a field is removed
+  function enableShopsInDropdown(removedField) {
+    var removedShop = removedField.find("select[name='shopName[]']").val();
+    if (removedShop) {
+      // Enable the shop in all remaining dropdowns
+      $("#additionalFieldsContainer select[name='shopName[]']").each(function () {
+        $(this).find("option[value='" + removedShop + "']").prop("disabled", false);
+      });
+    }
+  }
+
+  // Trigger update when a shop is selected
+  $("#additionalFieldsContainer").on("change", "select[name='shopName[]']", function () {
+    updateShopOptions();
+  });
+});
+
+
+</script>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"
+  integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<!-- <script>
+  $(document).ready(function () {
+    // Custom method to prevent space at the beginning
+    jQuery.validator.addMethod(
+      "noSpace",
+      function (value, element) {
+        return value == "" || !/^\s/.test(value);
+      },
+      "No space allowed at the beginning"
+    );
+
+    $("#profile").validate({
+      rules: {
+        categoryNames: {
+          required: true,
+          noSpace: true,
+        },
+        name: {
+          required: true,
+          noSpace: true,
+        },
+        nameArabic: {
+          required: true,
+          noSpace: true,
+        },
+        description: {
+          required: true,
+          noSpace: true,
+        },
+        descriptionArabic: {
+          required: true,
+          noSpace: true,
+        },
+        Brandname: {
+          required: true,
+          noSpace: true,
+        },
+        productUnitId: {
+          required: true,
+        },
+        price: {
+          required: true,
+          noSpace: true,
+          number: true,
+          min: 0.01,
+        },
+        BarCode: {
+      
+          minlength: 1,
+          maxlength: 8,
+        },
+        image: {
+          required: true,
+          extension: "jpg|jpeg|png",
+        },
+        "shopName[]": {
+          required: true,
+        },
+        "price[]": {
+          required: true,
+          number: true,
+          min: 0.01,
+        },
+        "Location[]": {
+          required: true,
+        },
+        "date[]": {
+          required: true,
+          date: true,
+          max: new Date().toISOString().split("T")[0],
+        },
+      },
+      messages: {
+        categoryNames: {
+          required: "Please select a category.",
+        },
+        name: {
+          required: "Please enter the product name.",
+        },
+        nameArabic: {
+          required: "Please enter the product name in Arabic.",
+        },
+        description: {
+          required: "Please enter the product description.",
+        },
+        descriptionArabic: {
+          required: "Please enter the product description in Arabic.",
+        },
+        Brandname: {
+          required: "Please select a brand.",
+        },
+        productUnitId: {
+          required: "Please select a product unit.",
+        },
+        price: {
+          required: "Please enter the price.",
+          number: "Enter a valid number.",
+          min: "Price must be greater than 0.",
+        },
+        BarCode: {
+     
+     
+          maxlength: "Barcode must be exactly 8 characters.",
+        },
+        image: {
+          required: "Please upload an image.",
+          extension: "Only JPG, JPEG, and PNG formats are allowed.",
+        },
+        "shopName[]": {
+          required: "Please select a store name.",
+        },
+        "price[]": {
+          required: "Please enter the price.",
+          number: "Enter a valid price.",
+          min: "Price must be greater than 0.",
+        },
+        "Location[]": {
+          required: "Please select a location.",
+        },
+        "date[]": {
+          required: "Please enter a date.",
+          date: "Enter a valid date.",
+          max: "Future dates are not allowed.",
+        },
+      },
+
+      errorElement: "div",
+      errorClass: "jqval-error",
+      errorPlacement: function (error, element) {
+        error.insertAfter(element);
+        error.slideDown(400);
+        error.animate(
+          {
+            opacity: 1,
+          },
+          {
+            queue: false,
+            duration: 700,
+          }
+        );
+        error.css("color", "red");
+      },
+
+      submitHandler: function (form) {
+        var error = $(".assign_error_div").text();
+        if (!error) {
+          form.submit();
+        }
+      },
+    });
+  });
+</script> -->
+
+
+<script>
+  $(window).on("load", function () {
+    if (feather) {
+      feather.replace({
+        width: 14,
+        height: 14,
+      });
+    }
+  });
+</script>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+<!-- <script>
+  let cropper;
+  let imageFile;
+
+  // Open crop modal when an image is selected
+  document.getElementById("image").addEventListener("change", function (event) {
+    imageFile = event.target.files[0];
+
+    if (imageFile) {
+      let reader = new FileReader();
+      reader.onload = function () {
+        let imageUrl = reader.result;
+        document.getElementById("imagePreview").src = imageUrl;
+        document.getElementById("cropModal").style.display = "block";
+
+        // Initialize cropper
+        cropper = new Cropper(document.getElementById("imagePreview"), {
+          aspectRatio: 16 / 9, // You can adjust this as per your need
+          viewMode: 1,
+          autoCropArea: 1,
+        });
+      };
+      reader.readAsDataURL(imageFile);
+    }
+  });
+
+  // Close modal when clicking on the "X"
+  document.getElementById("closeModal").addEventListener("click", function () {
+    document.getElementById("cropModal").style.display = "none";
+  });
+
+  // Crop the image and convert to base64
+  document.getElementById("cropImage").addEventListener("click", function () {
+    let canvas = cropper.getCroppedCanvas();
+    let croppedImage = canvas.toDataURL("image/jpeg"); // You can also use 'image/png'
+
+    // Set the base64 image to the hidden input
+    document.getElementById("croppedImage").value = croppedImage;
+
+    // Close the modal
+    document.getElementById("cropModal").style.display = "none";
+  });
+
+  // Ensure form submits the cropped image
+  document
+    .getElementById("profile")
+    .addEventListener("submit", function (event) {
+      let base64Image = document.getElementById("croppedImage").value;
+      if (!base64Image) {
+        event.preventDefault(); // Prevent form submission if image is not cropped
+        alert("Please crop the image before submitting.");
+      } else {
+        // Append base64 image to the form data before submitting
+        let inputImage = document.createElement("input");
+        inputImage.type = "hidden";
+        inputImage.name = "image"; // The same name as your file input field
+        inputImage.value = base64Image;
+
+        this.appendChild(inputImage);
+      }
+    });
+</script> -->
+
+
+
+<!-- <script>
+
+    // Open crop modal when an image is selected
+    document.getElementById("image").addEventListener("change", function (event) {
+    imageFile = event.target.files[0];
+
+    if (imageFile) {
+      let reader = new FileReader();
+      reader.onload = function () {
+        let imageUrl = reader.result;
+        document.getElementById("imagePreview").src = imageUrl;
+        document.getElementById("cropModal").style.display = "block";
+
+        // Initialize cropper with adjustable width and height
+        cropper = new Cropper(document.getElementById("imagePreview"), {
+          aspectRatio: NaN, // Set aspect ratio as NaN to allow free selection
+          viewMode: 1,
+          dragMode: "move", // Allow moving image
+          autoCropArea: 0.8, // Initial cropping area, adjustable by user
+          movable: true, // Enable image movement
+          zoomable: true, // Allow zooming
+          rotatable: true, // Enable rotation if required
+          cropBoxResizable: true, // Enable adjusting crop box
+          minCropBoxWidth: 50, // Minimum width
+          minCropBoxHeight: 50, // Minimum height
+          ready: function () {
+            // Automatically set the crop box to fit within the image
+            cropper.setCropBoxData({
+              width: 300, // Default width of crop area
+              height: 300, // Default height of crop area
+              left: 50, // Initial X position
+              top: 50, // Initial Y position
+            });
+          },
+        });
+      };
+      reader.readAsDataURL(imageFile);
+    }
+  });
+
+  // Close modal when clicking on the "X"
+  document.getElementById("closeModal").addEventListener("click", function () {
+    document.getElementById("cropModal").style.display = "none";
+  });
+
+  // Crop the image and convert to base64
+  document.getElementById("cropImage").addEventListener("click", function () {
+    let canvas = cropper.getCroppedCanvas({
+      width: cropper.getCropBoxData().width, // Get selected width
+      height: cropper.getCropBoxData().height, // Get selected height
+    });
+
+    let croppedImage = canvas.toDataURL("image/jpeg"); // Output as JPEG
+
+    // Set the base64 image to the hidden input
+    document.getElementById("croppedImage").value = croppedImage;
+
+    // Close the modal
+    document.getElementById("cropModal").style.display = "none";
+  });
+
+  // Ensure form submits the cropped image
+  
+
+</script> -->
+<!-- Hidden field for cropped image -->
+<!-- <input type="hidden" id="croppedImage" name="image" /> -->
+
+
+<script>
+
+
+  $(document).ready(function () {
+    // Custom method to prevent space at the beginning
+    jQuery.validator.addMethod(
+      "noSpace",
+      function (value, element) {
+        return value == "" || !/^\s/.test(value);
+      },
+      "No space allowed at the beginning"
+    );
+
+    $("#profile").validate({
+
+      rules: {
+    categoryNames: {
+      required: true,
+      noSpace: true,
+    },
+    shopNameTemp: {
+      required: true,
+      noSpace: true,
+    },
+    name: {
+      required: true,
+      noSpace: true,
+    },
+    nameArabic: {
+      required: true,
+      noSpace: true,
+    },
+    description: {
+      required: true,
+      noSpace: true,
+    },
+    descriptionArabic: {
+      required: true,
+      noSpace: true,
+    },
+    Brandname: {
+      required: true,
+      noSpace: true,
+    },
+    productUnitId: {
+      required: true,
+    },
+    price: {
+      required: true,
+      noSpace: true,
+      number: true,
+      min: 0.01,
+    },
+    BarCode: {
+      minlength: 1,
+      maxlength: 8,
+      remote: {
+        url: "/check-barcode",
+        // type: "POST",
+        data: {
+          BarCode: function () {
+            return $("#BarCode").val();
+          },
+        },
+        dataFilter: function (response) {
+          if (response === "true") {
+            isBarcodeValid = true; // Valid barcode
+            return true;
+          } else {
+            isBarcodeValid = false; // Barcode already exists
+            return false;
+          }
+        },
+      },
+    },
+    image: {
+      required: {
+        depends: function (element) {
+          return $("#croppedImage").val() == ""; // Validate if no cropped image
+        },
+      },
+      extension: "jpg|jpeg|png",
+    },
+    "shopName[]": {
+      required: true,
+    },
+    "shopName[]": {
+      required: true,
+    },
+    "price[]": {
+      required: true,
+      number: true,
+      min: 0.01,
+    },
+    "Location[]": {
+      required: true,
+    },
+    "date[]": {
+      required: true,
+      date: true,
+      max: new Date().toISOString().split("T")[0],
+    },
+  },
+  messages: {
+    categoryNames: {
+      required: "Please select a category.",
+    },
+    name: {
+      required: "Please enter the product name.",
+    },
+    shopNameTemp: {
+      required: "Please enter the Shop name.",
+    },
+    nameArabic: {
+      required: "Please enter the product name in Arabic.",
+    },
+    description: {
+      required: "Please enter the product description.",
+    },
+    descriptionArabic: {
+      required: "Please enter the product description in Arabic.",
+    },
+    Brandname: {
+      required: "Please select a brand.",
+    },
+    productUnitId: {
+      required: "Please select a product unit.",
+    },
+    price: {
+      required: "Please enter the price.",
+      number: "Enter a valid number.",
+      min: "Price must be greater than 0.",
+    },
+    BarCode: {
+      maxlength: "Barcode must be exactly 8 characters.",
+      remote: "Barcode Already exist"
+    },
+    image: {
+      required: "Please upload or crop an image.",
+      extension: "Only JPG, JPEG, and PNG formats are allowed.",
+    },
+
+    "shopName[]": {
+      required: "Please select a store name.",
+    },
+    "price[]": {
+      required: "Please enter the price.",
+      number: "Enter a valid price.",
+      min: "Price must be greater than 0.",
+    },
+    "Location[]": {
+      required: "Please select a location.",
+    },
+    "date[]": {
+      required: "Please enter a date.",
+      date: "Enter a valid date.",
+      max: "Future dates are not allowed.",
+    },
+  },
+
+  errorElement: "div",
+  errorClass: "jqval-error",
+  errorPlacement: function (error, element) {
+    error.insertAfter(element);
+    error.slideDown(400);
+    error.animate(
+      {
+        opacity: 1,
+      },
+      {
+        queue: false,
+        duration: 700,
+      }
+    );
+    error.css("color", "red");
+  },
+
+  // Validate again before showing the loader
+  submitHandler: function (form) {
+      if(("#profile").valid()){ // Force validation check
+
+        // Check if Barcode is invalid explicitly
+        if (!isBarcodeValid) {
+          alert("Barcode already exists. Please enter a different one.");
+          return false;
+        }
+
+        $("#loadingModal").modal("show");
+        form.submit();
+      }
+    },
+});
+
+
+  });
+  let cropper;
+  let imageFile;
+
+  // Open crop modal when an image is selected
+  document.getElementById("image").addEventListener("change", function (event) {
+    imageFile = event.target.files[0];
+
+    if (imageFile) {
+      let reader = new FileReader();
+      reader.onload = function () {
+        let imageUrl = reader.result;
+        document.getElementById("imagePreview").src = imageUrl;
+        document.getElementById("cropModal").style.display = "block";
+
+        // Destroy existing cropper if it exists
+        if (cropper) {
+          cropper.destroy();
+        }
+
+        // Initialize a new cropper instance with adjustable dimensions
+        cropper = new Cropper(document.getElementById("imagePreview"), {
+          aspectRatio: NaN, // Free aspect ratio (set to 1 for square, 16/9 for widescreen)
+          viewMode: 1, // Restrict crop inside boundaries
+          autoCropArea: 1, // Crop to 100% by default
+          movable: true, // Allow moving the image
+          zoomable: true, // Allow zooming
+          rotatable: true, // Allow rotating
+          cropBoxResizable: true, // Allow resizing crop box
+          minCropBoxWidth: 100, // Minimum width of crop box
+          minCropBoxHeight: 100, // Minimum height of crop box
+          ready: function () {
+            // Set crop box size and position on load
+            cropper.setCropBoxData({
+              width: 300, // Default crop box width
+              height: 300, // Default crop box height
+              left: 50, // Default X position
+              top: 50, // Default Y position
+            });
+          },
+        });
+      };
+      reader.readAsDataURL(imageFile);
+    }
+  });
+
+  // Close modal when clicking on the "X"
+  document.getElementById("closeModal").addEventListener("click", function () {
+    document.getElementById("cropModal").style.display = "none";
+
+    // Destroy cropper when modal is closed
+    if (cropper) {
+      cropper.destroy();
+      cropper = null;
+    }
+  });
+
+  // Crop the image and convert to base64
+  document.getElementById("cropImage").addEventListener("click", function () {
+    if (cropper) {
+      let canvas = cropper.getCroppedCanvas({
+        width: 500, // Final width of cropped image (adjust as needed)
+        height: 500, // Final height of cropped image (adjust as needed)
+      });
+
+      if (canvas) {
+        let croppedImage = canvas.toDataURL("image/jpeg"); // Cropped image in JPEG
+
+        // Assign cropped image to hidden input and preview
+        document.getElementById("croppedImage").value = croppedImage;
+
+        // Hide modal after cropping
+        document.getElementById("cropModal").style.display = "none";
+
+        // Destroy cropper after cropping to reset for next use
+        cropper.destroy();
+        cropper = null;
+      }
+    }
+  });
+
+  // Ensure form submits the cropped image correctly
+  document
+    .getElementById("profile")
+    .addEventListener("submit", function (event) {
+      let base64Image = document.getElementById("croppedImage").value;
+      if (!base64Image) {
+        event.preventDefault(); // Prevent form submission if image is not cropped
+    
+      } else {
+        // Append base64 image to the form before submitting
+        let inputImage = document.createElement("input");
+        inputImage.type = "hidden";
+        inputImage.name = "image"; // Same name as file input for consistency
+        inputImage.value = base64Image;
+
+        this.appendChild(inputImage);
+      }
+    });
+</script>
+

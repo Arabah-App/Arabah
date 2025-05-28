@@ -1,0 +1,89 @@
+<!-- BEGIN: Main Menu-->
+
+<div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
+
+  <div class="navbar-header">
+    <ul class="nav navbar-nav flex-row">
+      <li class="nav-item">
+        <a href="/dashboard" class="navbar-brand">
+          <img class="big_img" src="/app-assets/images/Notebooks.png" height="80">
+          <img class="sm_img" src="/app-assets/images/clipalogo.png" height="40">
+        </a>
+        <!-- <h2 class="brand-text">NewPro</h2> -->
+      </li>
+      <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pe-0" data-bs-toggle="collapse"><i class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i><i class="d-none d-xl-block collapse-toggle-icon font-medium-4  text-primary" data-feather="disc" data-ticon="disc"></i></a></li>
+    </ul>
+  </div>
+  <div class="shadow-bottom"></div>
+  <div class="main-menu-content">
+    <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+      <li class=" <%= title =='dashboard'?'active':'' %>"><a class="d-flex align-items-center" href="/dashboard"><i class="material-symbols-outlined">home</i><span class="menu-title text-truncate" data-i18n="Email">Dashboard</span></a>
+      </li>
+      <li class=" <%= title =='userList'?'active':'' %> "><a class="d-flex align-items-center" href="/userList"><i class="material-symbols-outlined">group</i><span class="menu-title text-truncate" data-i18n="Chat">Users</span></a>
+      </li>
+      <li class=" <%= title =='banner'?'active':'' %> "><a class="d-flex align-items-center" href="/bannerList"><i class="material-symbols-outlined">flag</i><span class="menu-title text-truncate" data-i18n="Banner">Banner</span></a>
+      </li>
+      <!-- <li class=" <%= title =='subuser_List'?'active':'' %> "><a class="d-flex align-items-center" href="/subuser_List"><i data-feather="users"></i><span class="menu-title text-truncate" data-i18n="Subscriptions">Sub User </span></a>
+      </li> -->
+      <!-- <li class=" <%= title =='babyList'?'active':'' %> "><a class="d-flex align-items-center" href="/babyList"><i data-feather="smile"></i><span class="menu-title text-truncate" data-i18n="Todo">Baby</span></a>
+      </li> -->
+      <li class=" <%= title =='category'?'active':'' %> "><a class="d-flex align-items-center" href="/CategoryList"><i class="material-symbols-outlined">category</i><span class="menu-title text-truncate" data-i18n="Category">Category</span></a>
+      </li>
+      <li class=" <%= title =='lights'?'active':'' %> "><a class="d-flex align-items-center" href="/SubCategoryList"><i class="material-symbols-outlined">shopping_cart</i><span class="menu-title text-truncate" data-i18n="Product">Product</span></a>
+      </li>
+      <li class=" <%= title =='Deal'?'active':'' %> "><a class="d-flex align-items-center" href="/DealList"><i class="material-symbols-outlined">sell</i><span class="menu-title text-truncate" data-i18n="rating">Deals</span></a>
+      </li>
+      <li class=" <%= title =='Brand'?'active':'' %> "><a class="d-flex align-items-center" href="/BrandList"><i class="material-symbols-outlined">sell</i></i><span class="menu-title text-truncate" data-i18n="Reports">Brand</span></a>
+      </li>
+      <li class=" <%= title =='Notification'?'active':'' %> "><a class="d-flex align-items-center" href="/notifications"><i class="material-symbols-outlined">sell</i></i><span class="menu-title text-truncate" data-i18n="Reports">Notifications</span></a>
+      </li>
+      <li class=" <%= title =='Store'?'active':'' %> ">
+        <a class="d-flex align-items-center" href="/StoreList">
+          <i class="material-symbols-outlined">store</i>
+          <span class="menu-title text-truncate" data-i18n="rating">Stores</span>
+        </a>
+      </li>
+      <li class=" <%= title =='ProdiuctUnit'?'active':'' %> ">
+        <a class="d-flex align-items-center" href="/ProdiuctUnitList">
+          <i class="material-symbols-outlined">store</i>
+          <span class="menu-title text-truncate" data-i18n="rating">Product Unit</span>
+        </a>
+      </li>
+      <li class=" <%= title =='LikeList'?'active':'' %> ">
+        <a class="d-flex align-items-center" href="/LikeList">
+          <i class="material-symbols-outlined">store</i>
+          <span class="menu-title text-truncate" data-i18n="rating">Fav Users Product</span>
+        </a>
+      </li>
+      <!-- <li class=" <%= title =='comments'?'active':'' %> "><a class="d-flex align-items-center" href="/CommentList"><i class="material-symbols-outlined">comment</i><span class="menu-title text-truncate" data-i18n="Comments">Comments</span></a>
+      </li> -->
+      <li class=" <%= title =='report'?'active':'' %> "><a class="d-flex align-items-center" href="/reportList"><i class="material-symbols-outlined">report</i></i><span class="menu-title text-truncate" data-i18n="Reports">Report Product</span></a>
+      </li>
+      <!-- <li class=" <%= title =='rating'?'active':'' %> "><a class="d-flex align-items-center" href="/ratingList"><i class="material-symbols-outlined">star</i><span class="menu-title text-truncate" data-i18n="rating">Ratings & Review</span></a>
+      </li> -->
+      <li class=" <%= title =='RaiseList'?'active':'' %> "><a class="d-flex align-items-center" href="/RaiseList"><i class="material-symbols-outlined">sell</i><span class="menu-title text-truncate" data-i18n="ticket">Support Request</span></a>
+      </li>
+      <!-- <li class=" <%= title =='subscriptionList'?'active':'' %> "><a class="d-flex align-items-center" href="/subscriptionList"><i data-feather="dollar-sign"></i><span class="menu-title text-truncate" data-i18n="Subscriptions">subscriptionList</span></a>
+      </li> -->
+      <!-- <li class=" <%= title =='push-notification'?'active':'' %> "><a class="d-flex align-items-center" href="/push-notification"><i data-feather="bell"></i><span class="menu-title text-truncate" data-i18n="Subscriptions">Push-notification </span></a>
+      </li>
+      <li class=" <%= title =='user_chat'?'active':'' %> "><a class="d-flex align-items-center" href="/user_chat"><i data-feather="message-circle"></i><span class="menu-title text-truncate" data-i18n="Subscriptions">Chat</span></a> 
+      </li> -->
+      <li class=" <%= title =='contactUsList'?'active':'' %> "><a class="d-flex align-items-center" href="/contactUsList"><i class="material-symbols-outlined">support_agent</i><span class="menu-title text-truncate" data-i18n="termsConditions">Contact Us </span></a>
+      </li>
+      <li class=" <%= title =='Faq'?'active':'' %> "><a class="d-flex align-items-center" href="/FaQList"><i class="material-symbols-outlined">quiz</i><span class="menu-title text-truncate" data-i18n="Subscriptions">FAQ</span></a>
+      </li>
+      <li class=" <%= title =='aboutUs'?'active':'' %> "><a class="d-flex align-items-center" href="/aboutUs"><i class="material-symbols-outlined">width_normal</i><span class="menu-title text-truncate" data-i18n="aboutUs">About Us</span></a>
+      </li>
+      <li class=" <%= title =='privacyPolicy'?'active':'' %> "><a class="d-flex align-items-center" href="/privacyPolicy"><i class="material-symbols-outlined">visibility_lock</i><span class="menu-title text-truncate" data-i18n="privacyPolicy">Privacy Policy</span></a>
+      </li>
+      <li class=" <%= title =='termsConditions'?'active':'' %> "><a class="d-flex align-items-center" href="/termsConditions"><i class="material-symbols-outlined">gavel</i><span class="menu-title text-truncate" data-i18n="termsConditions">Terms & Conditions</span></a>
+      </li>
+    </ul>
+  </div>
+</div>
+<!-- END: Main Menu-->
+
+
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>

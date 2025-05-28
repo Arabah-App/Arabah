@@ -1,0 +1,208 @@
+<%- include('../common/header') %> <%- include('../common/sidebar') %>
+<!-- BEGIN: Content-->
+<div class="app-content content">
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <section id="multiple-column-form">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header border-bottom">
+                <h4 class="card-title">Add Category</h4>
+              </div>
+              <br />
+              <div class="card-body">
+                <form
+                  class="form form-vertical"
+                  action="/postCategory"
+                  method="POST"
+                  id="profile"
+                  enctype="multipart/form-data"
+                >
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="name"
+                        >Category Name</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        id="categoryName"
+                        class="form-control"
+                        name="categoryName"
+                        placeholder="Enter Category Name"
+                        value=""
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="name"
+                        >Category Name (In Arabic)</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        id="categoryName"
+                        class="form-control"
+                        name="categoryNameArabic"
+                        placeholder="Category Name (In Arabic)"
+                        value=""
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="image">Image</label>
+                    </div>
+                    <div class="col-sm-10">
+                      <input
+                        type="file"
+                        id="image"
+                        class="form-control"
+                        name="image"
+                        accept=".png, .jpg, .jpeg"
+                        required
+                      />
+                    </div>
+                  </div>
+
+               
+                  <div class="row">
+                    <div class="col-12 text-end">
+                      <button
+                        type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light"
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div> 
+<%- include('../common/footer') %>
+<!-- <script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGxkyWAlm8QrBJDT22ph0Y0CtxOFDHUL0&libraries=places&callback=initAutocomplete"
+  async
+  defer
+></script> -->
+<!-- <script>
+  function initAutocomplete() {
+    var input = document.getElementById("location");
+    var searchBox = new google.maps.places.SearchBox(input);
+    var markers = [];
+
+    searchBox.addListener("places_changed", function () {
+      var places = searchBox.getPlaces();
+
+      $("#pac-lang").val(places[0].geometry.location.lng());
+      $("#pac-lat").val(places[0].geometry.location.lat());
+
+      if (places.length == 0) {
+        return;
+      }
+
+      markers.forEach(function (marker) {
+        marker.setMap(null);
+      });
+      markers = [];
+
+      var bounds = new google.maps.LatLngBounds();
+      places.forEach(function (place) {
+        if (!place.geometry) {
+          console.log("Returned place contains no geometry");
+          return;
+        }
+
+        if (place.geometry.viewport) {
+          bounds.union(place.geometry.viewport);
+        } else {
+          bounds.extend(place.geometry.location);
+        }
+      });
+    });
+  }
+</script> -->
+
+<script>
+  setTimeout(function () {
+    $("div.msg").fadeOut();
+  }, 2000);
+</script>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"
+  integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+
+<script>
+  $(document).ready(function () {
+    jQuery.validator.addMethod(
+      "noSpace",
+      function (value, element) {
+        return value == "" || !/^\s/.test(value);
+      },
+      "No space allowed at the beginning"
+    );
+
+    $("#profile").validate({
+      rules: {
+        categoryName: {
+          required: true,
+          noSpace: true,
+          maxlength: 60,
+        },
+   
+      },
+
+      errorElement: "div",
+      errorClass: "jqval-error",
+      errorPlacement: function (error, element) {
+        error.insertAfter(element);
+        error.slideDown(400);
+        error.animate(
+          {
+            opacity: 1,
+          },
+          {
+            queue: false,
+            duration: 700,
+          }
+        );
+        error.css("color", "red");
+      },
+
+      submitHandler: function (form) {
+        var error = $(".assign_error_div").text();
+        if (!error) {
+          form.submit();
+        }
+      },
+    });
+  });
+</script>
+<script>
+  $(window).on("load", function () {
+    if (feather) {
+      feather.replace({
+        width: 14,
+        height: 14,
+      });
+    }
+  });
+</script>

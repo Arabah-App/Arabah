@@ -1,0 +1,77 @@
+<%- include('../common/header') %>
+<%- include('../common/sidebar') %>
+
+
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <section id="multiple-column-form">
+        <div class="row justify-content-center">
+          <div class="col-12 ">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title"> View contact</h4>
+              </div>
+              <br>
+              <div class="card-body">
+                <form class="form form-vertical" id="" action="" method="POST" enctype="multipart/form-data">
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="name">Name</label>
+                    </div>
+                    <div class="col-sm-10">
+                      <input type="text" id="name" class="form-control" name="name" value="<%=contactUsDetail.name%> " disabled>
+                    </div>
+                  </div>
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="email">Email</label>
+                    </div>
+                    <div class="col-sm-10">
+                      <input type="text" id="email" class="form-control" name="email" value="<%=contactUsDetail.email%> " disabled>
+                    </div>
+                  </div>
+                  <!-- <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="phone">Phone</label>
+                    </div>
+                    <div class="col-sm-10">
+                      <input type="text" id="phone" class="form-control" name="phone" value=" <%=contactUsDetail.countryCode%><%=contactUsDetail.phone%> " disabled>
+                    </div>
+                  </div> -->
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="phone">Date Of Submission</label>
+                    </div>
+                    <div class="col-sm-10">
+                      <input type="text" id="phone" class="form-control" name="phone" value="<%= new Date(contactUsDetail.createdAt).toLocaleDateString('en-GB', {  year: 'numeric', month: 'short', day: 'numeric' }) %> " disabled>
+                    </div>
+                  </div>
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="phone">Message</label>
+                    </div>
+                    <div class="col-sm-10">
+                      <textarea class="form-control" name="message" value="" data-height="100" disabled><%=contactUsDetail.message%></textarea> <br>
+                    </div>
+                  </div>
+           
+                  <div class="row">
+                    <div class="col-12 text-end">
+                      <a href="/contactUsList" class="btn btn-primary float-right" title="Edit Profile"> Back </a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<%- include('../common/footer') %>

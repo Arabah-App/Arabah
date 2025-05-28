@@ -1,0 +1,319 @@
+<%- include('../common/header') %>
+<%- include('../common/sidebar') %>
+<!-- BEGIN: Content-->
+
+<style>
+  /* Style for the modal */
+  #cropModal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed position */
+    z-index: 1000; /* Make sure the modal is on top */
+    top: 0; /* Position from top */
+    left: 0; /* Position from left */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    overflow: auto; /* Allow scrolling if content overflows */
+    padding-top: 100px; /* Space from the top */
+  }
+
+  /* Modal content */
+  .modal-content {
+    background-color: white;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Width of the modal */
+    max-width: 600px; /* Maximum width */
+    border-radius: 10px; /* Rounded corners */
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Close button */
+  .close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Heading style */
+  .modal-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+
+  /* Button style */
+  #cropImage {
+    display: block;
+    width: 100%;
+    background-color: #4caf50; /* Green background */
+    color: white;
+    padding: 15px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+  }
+  .cropper-container.cropper-bg {
+    width: 100% !important;
+    height: 550px !important;
+    overflow: hidden;
+}
+
+  #cropImage:hover {
+    background-color: #45a049; /* Darker green on hover */
+  }
+
+  /* Image preview styling */
+  #imagePreview {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    object-fit: cover; /* Ensure the image covers the area */
+  }
+</style>
+<div class="app-content content ">
+  <div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <section id="multiple-column-form">
+        <div class="row justify-content-center">
+          <div class=" col-12 ">
+            <div class="card">
+              <div class="card-header border-bottom">
+                <h4 class="card-title"> Add Banner</h4>
+              </div>
+              <br>
+              <div class="card-body">
+                <form class="form form-vertical" action="/postbanner" method="POST" id="profile" enctype="multipart/form-data">
+
+            
+                  <div class="mb-1 row">
+                    <div class="col-sm-2">
+                      <label class="col-form-label new_lable" for="price"
+                        > Image</label
+                      >
+                    </div>
+                    <div class="col-sm-10">
+                      <input
+                        type="file"
+                        id="image"
+                        class="form-control"
+                        name="image"
+                        accept=".png, .jpg, .jpeg" 
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Cropper Modal -->
+                  <div id="cropModal" class="modal">
+                    <div class="modal-content">
+                      <span id="closeModal" class="close">&times;</span>
+                      <h2>Crop Image</h2>
+                      <img id="imagePreview" src="" alt="Image to crop" />
+                      <button type="button" id="cropImage">Crop</button>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 text-end">
+                      <button type="submit" class="btn btn-primary waves-effect waves-float waves-light">Add</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<%- include('../common/footer') %>
+
+<script>
+  setTimeout(function() {
+    $("div.msg").fadeOut();
+  }, 2000);
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js" integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script>
+  $(document).ready(function() {
+
+    jQuery.validator.addMethod("noSpace", function(value, element) {
+      return value == '' || value.trim().length != 0;
+    }, "No space allowed");
+
+    $('#profile').validate({
+      rules: {
+        categoryName: {
+          required: true,
+          noSpace: true,
+          maxlength: 60
+        },
+      },
+
+      errorElement: "div",
+      errorClass: "jqval-error",
+      errorPlacement: function(error, element) {
+        error.insertAfter(element);
+        error.slideDown(400);
+        error.animate({
+          opacity: 1
+        }, {
+          queue: false,
+          duration: 700
+        });
+      },
+
+      submitHandler: function(form) {
+        var error = $(".assign_error_div").text();
+        if (!error) {
+          form.submit();
+        }
+      }
+    });
+  });
+</script>
+<script>
+  $(window).on('load', function() {
+    if (feather) {
+      feather.replace({
+        width: 14,
+        height: 14
+      });
+    }
+  })
+</script>
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script>
+  let cropper;
+  let imageFile;
+
+  // Open crop modal when an image is selected
+  document.getElementById("image").addEventListener("change", function (event) {
+    imageFile = event.target.files[0];
+
+    if (imageFile) {
+      let reader = new FileReader();
+      reader.onload = function () {
+        let imageUrl = reader.result;
+        document.getElementById("imagePreview").src = imageUrl;
+        document.getElementById("cropModal").style.display = "block";
+
+        // Destroy existing cropper if it exists
+        if (cropper) {
+          cropper.destroy();
+        }
+
+        // Initialize a new cropper instance with adjustable dimensions
+        cropper = new Cropper(document.getElementById("imagePreview"), {
+          aspectRatio: NaN, // Free aspect ratio (set to 1 for square, 16/9 for widescreen)
+          viewMode: 1, // Restrict crop inside boundaries
+          autoCropArea: 1, // Crop to 100% by default
+          movable: true, // Allow moving the image
+          zoomable: true, // Allow zooming
+          rotatable: true, // Allow rotating
+          cropBoxResizable: true, // Allow resizing crop box
+          minCropBoxWidth: 100, // Minimum width of crop box
+          minCropBoxHeight: 100, // Minimum height of crop box
+          ready: function () {
+            // Set crop box size and position on load
+            cropper.setCropBoxData({
+              width: 300, // Default crop box width
+              height: 300, // Default crop box height
+              left: 50, // Default X position
+              top: 50, // Default Y position
+            });
+          },
+        });
+      };
+      reader.readAsDataURL(imageFile);
+    }
+  });
+
+  // Close modal when clicking on the "X"
+  document.getElementById("closeModal").addEventListener("click", function () {
+    document.getElementById("cropModal").style.display = "none";
+
+    // Destroy cropper when modal is closed
+    if (cropper) {
+      cropper.destroy();
+      cropper = null;
+    }
+  });
+
+  // Crop the image and convert to base64
+  document.getElementById("cropImage").addEventListener("click", function () {
+    if (cropper) {
+      let canvas = cropper.getCroppedCanvas({
+        width: 500, // Final width of cropped image (adjust as needed)
+        height: 500, // Final height of cropped image (adjust as needed)
+      });
+
+      if (canvas) {
+        let croppedImage = canvas.toDataURL("image/jpeg"); // Cropped image in JPEG
+
+        // Assign cropped image to hidden input and preview
+        document.getElementById("croppedImage").value = croppedImage;
+
+        // Hide modal after cropping
+        document.getElementById("cropModal").style.display = "none";
+
+        // Destroy cropper after cropping to reset for next use
+        cropper.destroy();
+        cropper = null;
+      }
+    }
+  });
+
+  // Ensure form submits the cropped image correctly
+  document
+    .getElementById("profile")
+    .addEventListener("submit", function (event) {
+      let base64Image = document.getElementById("croppedImage").value;
+      if (!base64Image) {
+        event.preventDefault(); // Prevent form submission if image is not cropped
+    
+      } else {
+        // Append base64 image to the form before submitting
+        let inputImage = document.createElement("input");
+        inputImage.type = "hidden";
+        inputImage.name = "image"; // Same name as file input for consistency
+        inputImage.value = base64Image;
+
+        this.appendChild(inputImage);
+      }
+    });
+</script>
+
+
+<!-- Hidden field for cropped image -->
+<input type="hidden" id="croppedImage" name="image" />

@@ -1,0 +1,7 @@
+/node_modules
+/public/images
+/public/qr-codes
+/public/csvfile
+/.env
+/package-lock.json
+/yarn.lock

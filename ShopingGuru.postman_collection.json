@@ -1,0 +1,469 @@
+{
+	"info": {
+		"_postman_id": "d29189e3-5285-4ca7-b521-87cba73bc546",
+		"name": "ShopingGuru",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "19292656"
+	},
+	"item": [
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}api/Signup"
+			},
+			"response": []
+		},
+		{
+			"name": "fileupload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/fileupload"
+			},
+			"response": []
+		},
+		{
+			"name": "verifyOtp",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/verifyOtp"
+			},
+			"response": []
+		},
+		{
+			"name": "CompleteProfile",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/CompleteProfile"
+			},
+			"response": []
+		},
+		{
+			"name": "changeLanguage",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/changeLanguage"
+			},
+			"response": []
+		},
+		{
+			"name": "Get_profile",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/Get_profile"
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteAccount",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/DeleteAccount"
+			},
+			"response": []
+		},
+		{
+			"name": "createTicket",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/createTicket"
+			},
+			"response": []
+		},
+		{
+			"name": "TicketList",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/TicketList"
+			},
+			"response": []
+		},
+		{
+			"name": "CraeteContact",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/CraeteContact"
+			},
+			"response": []
+		},
+		{
+			"name": "ProductLike",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/ProductLike"
+			},
+			"response": []
+		},
+		{
+			"name": "ProductLike_list",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/ProductLike_list"
+			},
+			"response": []
+		},
+		{
+			"name": "categorylist",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/categorylist"
+			},
+			"response": []
+		},
+		{
+			"name": "SubCategoryProduct",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/SubCategoryProduct"
+			},
+			"response": []
+		},
+		{
+			"name": "LatestProduct",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/LatestProduct"
+			},
+			"response": []
+		},
+		{
+			"name": "ProductDetail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/BarCodeDetail"
+			},
+			"response": []
+		},
+		{
+			"name": "BarCodeDetail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}api/BarCodeDetail"
+			},
+			"response": []
+		},
+		{
+			"name": "DealListing",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/DealListing"
+			},
+			"response": []
+		},
+		{
+			"name": "similarProducts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/similarProducts"
+			},
+			"response": []
+		},
+		{
+			"name": "CreateComment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/CreateComment"
+			},
+			"response": []
+		},
+		{
+			"name": "CommentList",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/CommentList"
+			},
+			"response": []
+		},
+		{
+			"name": "ReportCreate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/ReportCreate"
+			},
+			"response": []
+		},
+		{
+			"name": "CreateRating",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/CreateRating"
+			},
+			"response": []
+		},
+		{
+			"name": "RatingList",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/RatingList"
+			},
+			"response": []
+		},
+		{
+			"name": "home",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/home"
+			},
+			"response": []
+		},
+		{
+			"name": "categoryFilter",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/categoryFilter"
+			},
+			"response": []
+		},
+		{
+			"name": "allFilter",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/allFilter"
+			},
+			"response": []
+		},
+		{
+			"name": "PriceNotification",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/PriceNotification"
+			},
+			"response": []
+		},
+		{
+			"name": "Notifyme",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/Notifyme"
+			},
+			"response": []
+		},
+		{
+			"name": "FaQApi",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "ht{{baseUrl}}/api/FaQApi"
+			},
+			"response": []
+		},
+		{
+			"name": "ApplyFilletr",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}api/ApplyFilletr"
+			},
+			"response": []
+		},
+		{
+			"name": "logOut",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/logOut"
+			},
+			"response": []
+		},
+		{
+			"name": "searchfilter",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}api/searchfilter"
+			},
+			"response": []
+		},
+		{
+			"name": "AddtoShoppinglist",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/AddtoShoppinglist"
+			},
+			"response": []
+		},
+		{
+			"name": "ShoppingList",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/ShoppingList"
+			},
+			"response": []
+		},
+		{
+			"name": "ShoppingProduct_delete",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/ShoppingProduct_delete"
+			},
+			"response": []
+		},
+		{
+			"name": "ShoppinglistClear",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/ShoppinglistClear"
+			},
+			"response": []
+		},
+		{
+			"name": "deeletNotifiction",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}api/deeletNotifiction"
+			},
+			"response": []
+		},
+		{
+			"name": "CreateSerach",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/CreateSerach"
+			},
+			"response": []
+		},
+		{
+			"name": "SearchList",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/SearchList"
+			},
+			"response": []
+		},
+		{
+			"name": "SerachDelete",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/SerachDelete"
+			},
+			"response": []
+		},
+		{
+			"name": "NotesCreate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/NotesCreate"
+			},
+			"response": []
+		},
+		{
+			"name": "CMSGet",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/CMSGet"
+			},
+			"response": []
+		},
+		{
+			"name": "getNotes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/getNotes"
+			},
+			"response": []
+		},
+		{
+			"name": "Notes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/Notes"
+			},
+			"response": []
+		},
+		{
+			"name": "getNotesdetail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/getNotesdetail"
+			},
+			"response": []
+		},
+		{
+			"name": "deleteNotes",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseUrl}}/api/deleteNotes"
+			},
+			"response": []
+		},
+		{
+			"name": "Getnotification",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/Getnotification"
+			},
+			"response": []
+		},
+		{
+			"name": "FaqGet",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/FaqGet"
+			},
+			"response": []
+		},
+		{
+			"name": "privacy-policy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/terms-And-Condition"
+			},
+			"response": []
+		},
+		{
+			"name": "terms-And-Condition",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/terms-And-Condition"
+			},
+			"response": []
+		}
+	]
+}

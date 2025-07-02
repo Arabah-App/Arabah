@@ -1,6 +1,8 @@
 const createError = require("http-errors");
 const express = require("express");
+const sanitizeInputs = require('./utility/sanitizeInputs');
 const app = express();
+const helmet = require("helmet");
 const compression = require("compression");
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
@@ -22,9 +24,11 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(logger("dev"));
 app.use(express.json());
+app.use(sanitizeInputs);
 app.use(fileupload());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(helmet());
 app.use(
   express.static(path.join(__dirname, "public"), {
     maxAge: "1y", 
@@ -35,7 +39,7 @@ app.use(
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 24 * 60 * 60 * 365 * 1000 },
+    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
   })
 );
 app.use(
@@ -45,6 +49,10 @@ app.use(
   })
 );
 app.use(flash());
+// app.use(sanitizeInputs);
+
+
+
 app.use("/", indexRouter);
 app.use("/api", apiRouter);
 

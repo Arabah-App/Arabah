@@ -69,7 +69,7 @@ module.exports = {
       const userId = req.user._id;
       const SerachList = await SearchModel.find({ userId: userId });
       if (SerachList.length === 0) {
-        return helper.success(res, "list empty");
+        return helper.success(res, "list empty",SerachList);
       }
       return helper.success(res, "Get List", SerachList);
     } catch (error) {

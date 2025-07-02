@@ -2,11 +2,12 @@ const express = require("express");
 const {
   uploadFile,
   asyncMiddleware,
-  authenticateToken,
-                   
+  authenticateToken,        
   opinalauthenticateToken,
+  createRateLimiter,
 
 } = require("../utility/helpers");
+
 const UserController = require("../controller/Api/UserController");
 const cmsController = require("../controller/Api/cmsController");
 
@@ -23,13 +24,19 @@ const SearchController = require("../controller/Api/SearchController");
 const NotesController = require("../controller/Api/NotesController");
 const router = express.Router();
 
+const signupLimiter = createRateLimiter({
+  windowMs: 1 * 60 * 1000,
+  max: 5,
+  message: "Too many signup attempts, try again later.",
+});
+
 router.post("/fileupload", uploadFile);
 
 //<-------------------auth--------------------------->
-router.post("/Signup", asyncMiddleware,UserController.Signup);
-router.post("/verifyOtp", asyncMiddleware, UserController.verifyOtp);
+router.post("/Signup",signupLimiter,asyncMiddleware,UserController.Signup);
+router.post("/verifyOtp",signupLimiter, asyncMiddleware, UserController.verifyOtp);
 
-router.post("/resent_otp", asyncMiddleware, UserController.resent_otp);
+router.post("/resent_otp",signupLimiter, asyncMiddleware, UserController.resent_otp);
 router.get("/privacy-policy", cmsController.privacyPolicyUrl);
 router.get("/terms-And-Condition", cmsController.termsAndCondition);
 

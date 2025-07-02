@@ -17,19 +17,6 @@ module.exports = {
       console.log(error, "Somethimg Went Wrong");
     }
   },
-
-  //   SubCategoryProduct: async (req, res) => {
-  //     try {
-  //       const categoryId = new mongoose.Types.ObjectId(req.query.categoryId);
-  //       let Product = await Model.LightsModel.find({
-  //         categoryNames: categoryId,
-  //         product: { $not: { $size: 0 } },
-  //       })
-  //  return helper.success(res, "",Product);
-  //     } catch (error) {
-  //       console.log(error, "Somethimg Went Wrong");
-  //     }
-  //   },
   SubCategoryProduct: async (req, res) => {
     try {
       const categoryId = new mongoose.Types.ObjectId(req.query.categoryId);
@@ -54,7 +41,6 @@ module.exports = {
       return res.status(500).json({ message: "Internal Server Error" });
     }
   },
-
   LatestProduct: async (req, res) => {
     try {
       let products = await Model.LightsModel.find({
@@ -75,9 +61,7 @@ module.exports = {
       console.log(error, "Somethimg Went Wrong");
     }
   },
-
-  
-    ProductDetail: async (req, res) => {
+  ProductDetail: async (req, res) => {
     try {
       const Product = new mongoose.Types.ObjectId(req.query.id);
 
@@ -94,95 +78,95 @@ module.exports = {
       let ratingCount;
       ratingCount = ratings.length ? ratings.length : 0;
 
-      const averageRating =ratings.length > 0
-          ? ratings.reduce((sum, rating) => sum + rating.rating, 0) /
-            ratings.length
-          : 0;
+      const averageRating = ratings.length > 0
+        ? ratings.reduce((sum, rating) => sum + rating.rating, 0) /
+        ratings.length
+        : 0;
 
       const allStore = await StoreModel.find();
-//       const ProductDetail = await Model.LightsModel.findById(Product)
-//         .populate({
-//           path: "product.shopName",
-//           model: "Store",
-//         })
-//         .populate("BrandID")
-//         .populate("productUnitId");
+      //       const ProductDetail = await Model.LightsModel.findById(Product)
+      //         .populate({
+      //           path: "product.shopName",
+      //           model: "Store",
+      //         })
+      //         .populate("BrandID")
+      //         .populate("productUnitId");
 
 
 
 
 
-//         const product = {
-//           // your product object here...
-//         };
-        
-//         if (ProductDetail.product.updatedList && ProductDetail.product.updatedList.length > 0) {
+      //         const product = {
+      //           // your product object here...
+      //         };
+
+      //         if (ProductDetail.product.updatedList && ProductDetail.product.updatedList.length > 0) {
 
 
-          
-//           // Find the latest update from updatedList
-//           const latestUpdate = ProductDetail.product.product.updatedList.reduce((latest, current) => {
-//             return new Date(current.date) > new Date(latest.date) ? current : latest;
-//           });
-        
-//           // Update the product array
-//           ProductDetail.product.product.product = ProductDetail.product.product.product.map(item => {
-//             if (item.shopName._id === latestUpdate.shopName) {
-//               return {
-//                 ...item,
-//                 price: latestUpdate.price,
-//                 date: latestUpdate.date,
-//               };
-//             }
-//             return item;
-//           });
-//         }
-        
-//         console.log(ProductDetail.updatedList);
-        
-// return
 
-const ProductDetail = await Model.LightsModel.findById(Product)
-  .populate({
-    path: "product.shopName",
-    model: "Store",
-  })
-  .populate("BrandID")
-  .populate("productUnitId");
+      //           // Find the latest update from updatedList
+      //           const latestUpdate = ProductDetail.product.product.updatedList.reduce((latest, current) => {
+      //             return new Date(current.date) > new Date(latest.date) ? current : latest;
+      //           });
 
-// if (ProductDetail?.updatedList?.length > 0 && Array.isArray(ProductDetail.product)) {
-//   const updatesByShop = {};
+      //           // Update the product array
+      //           ProductDetail.product.product.product = ProductDetail.product.product.product.map(item => {
+      //             if (item.shopName._id === latestUpdate.shopName) {
+      //               return {
+      //                 ...item,
+      //                 price: latestUpdate.price,
+      //                 date: latestUpdate.date,
+      //               };
+      //             }
+      //             return item;
+      //           });
+      //         }
 
-//   // Group updates by shopName and keep the latest one per shop
-//   ProductDetail.updatedList.forEach(update => {
-//     const shopId = update.shopName?.toString(); // In case it's not populated
-//     if (!shopId) return;
+      //         console.log(ProductDetail.updatedList);
 
-//     const currentDate = new Date(update.date);
-//     const existingUpdate = updatesByShop[shopId];
-//     if (!existingUpdate || currentDate > new Date(existingUpdate.date)) {
-//       updatesByShop[shopId] = update;
-//     }
-//   });
+      // return
 
-//   // Apply updates to product array
-//   ProductDetail.product = ProductDetail.product.map(item => {
-//     const shopId = item.shopName?._id?.toString();
-//     if (shopId && updatesByShop[shopId]) {
-//       const update = updatesByShop[shopId];
-//       return {
-//         ...item,
-//         price: update.price,
-//         date: update.date,
-//       };
-//     }
-//     return item;
-//   });
-// }
+      const ProductDetail = await Model.LightsModel.findById(Product)
+        .populate({
+          path: "product.shopName",
+          model: "Store",
+        })
+        .populate("BrandID")
+        .populate("productUnitId");
+
+      // if (ProductDetail?.updatedList?.length > 0 && Array.isArray(ProductDetail.product)) {
+      //   const updatesByShop = {};
+
+      //   // Group updates by shopName and keep the latest one per shop
+      //   ProductDetail.updatedList.forEach(update => {
+      //     const shopId = update.shopName?.toString(); // In case it's not populated
+      //     if (!shopId) return;
+
+      //     const currentDate = new Date(update.date);
+      //     const existingUpdate = updatesByShop[shopId];
+      //     if (!existingUpdate || currentDate > new Date(existingUpdate.date)) {
+      //       updatesByShop[shopId] = update;
+      //     }
+      //   });
+
+      //   // Apply updates to product array
+      //   ProductDetail.product = ProductDetail.product.map(item => {
+      //     const shopId = item.shopName?._id?.toString();
+      //     if (shopId && updatesByShop[shopId]) {
+      //       const update = updatesByShop[shopId];
+      //       return {
+      //         ...item,
+      //         price: update.price,
+      //         date: update.date,
+      //       };
+      //     }
+      //     return item;
+      //   });
+      // }
 
 
-// console.log(ProductDetail.product); // See the final modified product array
-// return;
+      // console.log(ProductDetail.product); // See the final modified product array
+      // return;
 
 
 
@@ -301,7 +285,6 @@ const ProductDetail = await Model.LightsModel.findById(Product)
       console.log(error);
     }
   },
-
   ProductLike: async (req, res) => {
     try {
       const userId = req.user._id;
@@ -336,7 +319,6 @@ const ProductDetail = await Model.LightsModel.findById(Product)
       return helpers.failed(res, "An error occurred");
     }
   },
-
   ProductLike_list: async (req, res) => {
     try {
       const userId = new mongoose.Types.ObjectId(req.user._id);
@@ -358,7 +340,6 @@ const ProductDetail = await Model.LightsModel.findById(Product)
       return helpers.failed(res, "An error occurred while fetching likes");
     }
   },
-
   BarCodeDetail: async (req, res) => {
     try {
       const { barcode } = req.query;
@@ -394,7 +375,7 @@ const ProductDetail = await Model.LightsModel.findById(Product)
       const averageRating =
         ratings.length > 0
           ? ratings.reduce((sum, rating) => sum + rating.rating, 0) /
-            ratings.length
+          ratings.length
           : 0;
 
       const allStore = await StoreModel.find();
@@ -487,4 +468,5 @@ const ProductDetail = await Model.LightsModel.findById(Product)
       return helper.failed(res, "Something went wrong");
     }
   },
+  
 };

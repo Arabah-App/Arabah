@@ -7,6 +7,8 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("../Model/userModel");
 const userModel = require("../Model/userModel");
 const helper = require("../utility/helper")
+const rateLimit = require('express-rate-limit');
+const logger = require('./logger');
 require("dotenv").config();
 // const redis = require("../controller/Api/redis");
 
@@ -44,38 +46,32 @@ const failed = async function (res, message = "") {
     body: {},
   });
 };
-const secret =
-  "2bfdb99389a53941f85307af2ea2651a6c97ee33cef1bf69107ff9cee70016c0";
+const secret = process.env.JWT_KEY;
 // Exporting an object containing uploadFile function
 module.exports = {
 
-
-
-   cacheMiddleware :async (req, res, next) => {
+  cacheMiddleware: async (req, res, next) => {
     const key = req.originalUrl;
     try {
       const cachedData = await redis.get(key);
-  
+
       if (cachedData) {
         return res.json(JSON.parse(cachedData)); // Return cached response
       }
-  
+
 
       const originalJson = res.json;
       res.json = (body) => {
         redis.setex(key, 3600, JSON.stringify(body)); // Cache for 1 hour
         originalJson.call(res, body); // Call original `res.json`
       };
-  
-      next(); 
+
+      next();
     } catch (error) {
       console.error("Redis Cache Error:", error);
-      next(); 
+      next();
     }
   },
-  
-
-
   // Function to handle file uploads
   uploadFile: async function (req, res) {
     try {
@@ -166,25 +162,19 @@ module.exports = {
   catchServerError: async function (err, req, res, next) {
     try {
       if (err) {
+        logger.error(`${req.method} ${req.originalUrl} - ${err.message}`);
         if (err.statusCode) {
           return res.status(err.statusCode).send(err);
         } else throw err;
       }
     } catch (err) {
-      console.log("err : -", err);
+      logger.error(`${req.method} ${req.originalUrl} - Internal server error: ${err.message}`);
       return res.status(501).send({
         statusCode: 501,
         message: "Internal server error",
-        // body: {
-        //     apiVersion: apiVersion,
-        //     apiType: apiType,
-        //     apiDoc: apiDoc,
-        //     info: "We are unable for handdle this request at this time",
-        // },
       });
     }
   },
-
   TryCatchHanddler: function (fun) {
     return async function (req, res, next) {
       try {
@@ -200,7 +190,6 @@ module.exports = {
       }
     };
   },
-
   dataValidator: function (validationSchema, data) {
     try {
       let validation = validationSchema.validate(data);
@@ -223,18 +212,7 @@ module.exports = {
       throw err;
     }
   },
-
-  //   success: async function (res, message = "", body = {}) {
-  //     return res.status(200).json({
-  //       success: true,
-  //       code: 200,
-  //       message: message,
-  //       body: body,
-  //     });
-  //   },
-
   failed: failed,
-
   AsyncHanddle: function (fn) {
     return async function (req, res, next) {
       try {
@@ -248,9 +226,6 @@ module.exports = {
       }
     };
   },
-
-  
- 
   asyncMiddleware: async function (req, res, next) {
     try {
       const SECRET_KEY = req.headers["secret_key"];
@@ -269,29 +244,6 @@ module.exports = {
       console.log(error);
     }
   },
-
-  //   authenticateToken: async function (req, res, next) {
-  //     try {
-  //       const authHeader = req.headers["authorization"];
-  //       const token = authHeader.split(" ")[1];
-  //       if (!token) {
-  //         return failed(res, "Unauthorized");
-  //       }
-  //       const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
-  //       const isValidUser = await UserModel.findOne({
-  //         _id: decodedToken._id,
-  //       });
-  //       if (!isValidUser) {
-  //         return failed(res, "Invalid token");
-  //       }
-  //       req.user = isValidUser;
-  //       next();
-  //     } catch (error) {
-  //       console.log(error);
-  //       return failed(res, "Invalid token");
-  //     }
-  //   },
-
   checkValidation: async (v) => {
     var errorsResponse;
 
@@ -402,7 +354,7 @@ module.exports = {
 
         let userInfo = await userModel.findOne({
           _id: user._id,
-          loginTime:user.loginTime
+          loginTime: user.loginTime
         });
         if (userInfo) {
           userInfo = JSON.parse(JSON.stringify(userInfo));
@@ -417,27 +369,24 @@ module.exports = {
       res.sendStatus(401);
     }
   },
-
-
-
   opinalauthenticateToken: async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      return next(); 
+      return next();
     }
-  
+
     const token = authHeader.split(" ")[1];
     jwt.verify(token, secret, async (err, user) => {
       if (err) {
         return res.sendStatus(401); // Invalid token
       }
-  
+
       let userInfo = await userModel.findOne({
         _id: user._id,
         loginTime: user.loginTime,
       });
-  
+
       if (userInfo) {
         userInfo = JSON.parse(JSON.stringify(userInfo));
         req.user = userInfo;
@@ -447,7 +396,6 @@ module.exports = {
       }
     });
   },
-  
   async fileUpload(files, folder = "users") {
     const file_name_string = files.name;
     const file_name_array = file_name_string.split(".");
@@ -651,4 +599,18 @@ module.exports = {
       return "";
     }
   },
+  createRateLimiter: ({ windowMs, max, message,}) => {
+    const limiter = rateLimit({
+    windowMs,
+    max,
+    message: {
+      success: false,
+      message,
+    },
+  });
+
+  return limiter;
+  }
+
+
 };

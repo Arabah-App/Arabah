@@ -130,7 +130,7 @@ module.exports = {
                 BarCode: productData.BarCode,
               });
               console.log(product, "productproduct");
-            
+
               await product.save();
             } catch (err) {
               console.log(
@@ -170,36 +170,47 @@ module.exports = {
   }),
 
   addBulk: helpers.AsyncHanddle(async (req, res) => {
-    let category = await categoryModel.find({ deleted: false });
-    let store = await StoreModel.find();
+    try {
+      let category = await categoryModel.find({ deleted: false });
+      let store = await StoreModel.find();
 
-    let title = "lights";
-    res.render("Admin/lights/BulkProdcutadd", {
-      title,
-      category,
-      store,
-      session: req.session.user,
-      message: req.flash("message"),
-      msg: req.flash("msg"),
-    });
+      let title = "lights";
+      res.render("Admin/lights/BulkProdcutadd", {
+        title,
+        category,
+        store,
+        session: req.session.user,
+        message: req.flash("message"),
+        msg: req.flash("msg"),
+      });
+    } catch (error) {
+
+    }
   }),
 
   addLights: helpers.AsyncHanddle(async (req, res) => {
-    let category = await categoryModel.find({ deleted: false });
-    let store = await StoreModel.find();
-    let Brand = await BrandModel.find();
-    let Productunit = await ProductUnintModel.find();
-    let title = "lights";
-    res.render("Admin/lights/addActivity", {
-      title,
-      category,
-      Brand,
-      Productunit,
-      store,
-      session: req.session.user,
-      message: req.flash("message"),
-      msg: req.flash("msg"),
-    });
+    try {
+
+
+      let category = await categoryModel.find({ deleted: false });
+      let store = await StoreModel.find();
+      let Brand = await BrandModel.find();
+      let Productunit = await ProductUnintModel.find();
+      let title = "lights";
+      res.render("Admin/lights/addActivity", {
+        title,
+        category,
+        Brand,
+        Productunit,
+        store,
+        session: req.session.user,
+        message: req.flash("message"),
+        msg: req.flash("msg"),
+      });
+    } catch (error) {
+
+    }
+
   }),
   // lightCreate: helpers.AsyncHanddle(async (req, res) => {
   //   // if (req.files && req.files.image) {
@@ -377,9 +388,9 @@ module.exports = {
           descriptionArabic: req.body.descriptionArabic,
           ProdiuctUnitArabic: req.body.ProdiuctUnitArabic,
           productUnitId: req.body.productUnitId,
-          BrandID: req.body.Brandname &&  mongoose.Types.ObjectId.isValid(req.body.Brandname)
-          ? new mongoose.Types.ObjectId(req.body.Brandname) // Convert valid string to ObjectId
-          : null,
+          BrandID: req.body.Brandname && mongoose.Types.ObjectId.isValid(req.body.Brandname)
+            ? new mongoose.Types.ObjectId(req.body.Brandname) // Convert valid string to ObjectId
+            : null,
           price: req.body.price ? req.body.price : "0",
           product: products,
           image: imagePath,
@@ -507,304 +518,347 @@ module.exports = {
     });
   }),
   ProductComment: helpers.AsyncHanddle(async (req, res) => {
-    let title = "lights";
-    const lightdetail = await Model.LightsModel.findById({
-      _id: req.params.id,
-    });
 
-    let comment = await Model.commentsModel
-      .find({
-        ProductID: req.params.id,
-      })
-      .populate([
-        { path: "userId", model: "User" },
-        { path: "ProductID", model: "light" },
-      ]);
+    try {
 
-    res.render("Admin/lights/commentProduct", {
-      title,
-      lightdetail,
-      comment,
-      session: req.session.user,
-      message: req.flash("message"),
-      msg: req.flash("msg"),
-    });
+
+
+      let title = "lights";
+      const lightdetail = await Model.LightsModel.findById({
+        _id: req.params.id,
+      });
+
+      let comment = await Model.commentsModel
+        .find({
+          ProductID: req.params.id,
+        })
+        .populate([
+          { path: "userId", model: "User" },
+          { path: "ProductID", model: "light" },
+        ]);
+
+      res.render("Admin/lights/commentProduct", {
+        title,
+        lightdetail,
+        comment,
+        session: req.session.user,
+        message: req.flash("message"),
+        msg: req.flash("msg"),
+      });
+    } catch (error) {
+
+    }
+
   }),
   ProductRating: helpers.AsyncHanddle(async (req, res) => {
-    let title = "lights";
-    const lightdetail = await Model.LightsModel.findById({
-      _id: req.params.id,
-    });
 
-    let rating = await Model.ratingModel
-      .find({
-        ProductID: req.params.id,
-      })
-      .populate([
-        { path: "userId", model: "User" },
-        { path: "ProductID", model: "light" },
-      ]);
+    try {
 
-    res.render("Admin/lights/RatingProduct", {
-      title,
-      lightdetail,
 
-      rating,
-      session: req.session.user,
-      message: req.flash("message"),
-      msg: req.flash("msg"),
-    });
+
+
+      let title = "lights";
+      const lightdetail = await Model.LightsModel.findById({
+        _id: req.params.id,
+      });
+
+      let rating = await Model.ratingModel
+        .find({
+          ProductID: req.params.id,
+        })
+        .populate([
+          { path: "userId", model: "User" },
+          { path: "ProductID", model: "light" },
+        ]);
+
+      res.render("Admin/lights/RatingProduct", {
+        title,
+        lightdetail,
+
+        rating,
+        session: req.session.user,
+        message: req.flash("message"),
+        msg: req.flash("msg"),
+      });
+
+    } catch (error) {
+
+    }
   }),
   ProductReport: helpers.AsyncHanddle(async (req, res) => {
-    let title = "lights";
-    const lightdetail = await Model.LightsModel.findById({
-      _id: req.params.id,
-    });
 
-    let Report = await Model.reportModel
-      .find({
-        ProductID: req.params.id,
-      })
-      .populate([
-        { path: "userId", model: "User" },
-        { path: "ProductID", model: "light" },
-      ]);
+    try {
 
-    res.render("Admin/lights/reportProduct", {
-      title,
-      lightdetail,
 
-      Report,
+      let title = "lights";
+      const lightdetail = await Model.LightsModel.findById({
+        _id: req.params.id,
+      });
 
-      session: req.session.user,
-      message: req.flash("message"),
-      msg: req.flash("msg"),
-    });
+      let Report = await Model.reportModel
+        .find({
+          ProductID: req.params.id,
+        })
+        .populate([
+          { path: "userId", model: "User" },
+          { path: "ProductID", model: "light" },
+        ]);
+
+      res.render("Admin/lights/reportProduct", {
+        title,
+        lightdetail,
+
+        Report,
+
+        session: req.session.user,
+        message: req.flash("message"),
+        msg: req.flash("msg"),
+      });
+    } catch (error) {
+
+    }
+
+
   }),
   viewProduct: helpers.AsyncHanddle(async (req, res) => {
-    let title = "lights";
-    const lightdetail = await Model.LightsModel.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } },
 
-      {
-        $lookup: {
-          from: "users",
-          localField: "userId",
-          foreignField: "_id",
-          as: "userId",
+    try {
+
+      let title = "lights";
+      const lightdetail = await Model.LightsModel.aggregate([
+        { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } },
+
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userId",
+          },
         },
-      },
 
-      { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
 
-      {
-        $lookup: {
-          from: "categories",
-          localField: "categoryNames",
-          foreignField: "_id",
-          as: "categoryNames",
+        {
+          $lookup: {
+            from: "categories",
+            localField: "categoryNames",
+            foreignField: "_id",
+            as: "categoryNames",
+          },
         },
-      },
 
-      { $unwind: { path: "$categoryNames", preserveNullAndEmptyArrays: true } },
-      {
-        $lookup: {
-          from: "brands", // Ensure the collection name is correct
-          localField: "BrandID", // Ensure LightsModel has this field
-          foreignField: "_id",
-          as: "brand",
+        { $unwind: { path: "$categoryNames", preserveNullAndEmptyArrays: true } },
+        {
+          $lookup: {
+            from: "brands", // Ensure the collection name is correct
+            localField: "BrandID", // Ensure LightsModel has this field
+            foreignField: "_id",
+            as: "brand",
+          },
         },
-      },
-      { $unwind: { path: "$brand", preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$brand", preserveNullAndEmptyArrays: true } },
 
-      { $unwind: { path: "$product", preserveNullAndEmptyArrays: true } },
-      {
-        $lookup: {
-          from: "prodiuctunits",
-          localField: "productUnitId",
-          foreignField: "_id",
-          as: "Unit",
+        { $unwind: { path: "$product", preserveNullAndEmptyArrays: true } },
+        {
+          $lookup: {
+            from: "prodiuctunits",
+            localField: "productUnitId",
+            foreignField: "_id",
+            as: "Unit",
+          },
         },
-      },
-      { $unwind: { path: "$Unit", preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$Unit", preserveNullAndEmptyArrays: true } },
 
-      {
-        $lookup: {
-          from: "stores",
-          localField: "product.shopName",
-          foreignField: "_id",
-          as: "product.shopName",
+        {
+          $lookup: {
+            from: "stores",
+            localField: "product.shopName",
+            foreignField: "_id",
+            as: "product.shopName",
+          },
         },
-      },
 
-      {
-        $unwind: {
-          path: "$product.shopName",
-          preserveNullAndEmptyArrays: true,
+        {
+          $unwind: {
+            path: "$product.shopName",
+            preserveNullAndEmptyArrays: true,
+          },
         },
-      },
 
-      {
-        $group: {
-          _id: "$_id",
-          userId: { $first: "$userId" },
-          categoryNames: { $first: "$categoryNames" },
-          name: { $first: "$name" },
-          Brandname: { $first: "$brand.Brandname" },
-          BrandnameArabic: { $first: "$brand.BrandnameArabic" },
-          description: { $first: "$description" },
-          BarCode: { $first: "$BarCode" },
+        {
+          $group: {
+            _id: "$_id",
+            userId: { $first: "$userId" },
+            categoryNames: { $first: "$categoryNames" },
+            name: { $first: "$name" },
+            Brandname: { $first: "$brand.Brandname" },
+            BrandnameArabic: { $first: "$brand.BrandnameArabic" },
+            description: { $first: "$description" },
+            BarCode: { $first: "$BarCode" },
 
-          descriptionArabic: { $first: "$descriptionArabic" },
-          price: { $first: "$price" },
-          image: { $first: "$image" },
-          qrCode: { $first: "$qrCode" },
-          productUnitName: { $first: "$Unit.ProdiuctUnit" }, // ✅ Shows Unit Name
-          deleted: { $first: "$deleted" },
-          createdAt: { $first: "$createdAt" },
-          updatedAt: { $first: "$updatedAt" },
-          product: {
-            $push: {
-              shopName: {
-                _id: "$product.shopName._id",
-                name: "$product.shopName.name",
-                image: "$product.shopName.image",
+            descriptionArabic: { $first: "$descriptionArabic" },
+            price: { $first: "$price" },
+            image: { $first: "$image" },
+            qrCode: { $first: "$qrCode" },
+            productUnitName: { $first: "$Unit.ProdiuctUnit" }, // ✅ Shows Unit Name
+            deleted: { $first: "$deleted" },
+            createdAt: { $first: "$createdAt" },
+            updatedAt: { $first: "$updatedAt" },
+            product: {
+              $push: {
+                shopName: {
+                  _id: "$product.shopName._id",
+                  name: "$product.shopName.name",
+                  image: "$product.shopName.image",
+                },
+                price: "$product.price",
+                Location: "$product.Location",
+                date: "$product.date",
               },
-              price: "$product.price",
-              Location: "$product.Location",
-              date: "$product.date",
             },
           },
         },
-      },
-    ]);
-    console.log(lightdetail);
+      ]);
+      console.log(lightdetail);
 
-    res.render("Admin/lights/viewProduct", {
-      title,
-      lightdetail: lightdetail[0],
-      session: req.session.user,
-      message: req.flash("message"),
-      msg: req.flash("msg"),
-    });
+      res.render("Admin/lights/viewProduct", {
+        title,
+        lightdetail: lightdetail[0],
+        session: req.session.user,
+        message: req.flash("message"),
+        msg: req.flash("msg"),
+      });
+
+    } catch (error) {
+
+    }
   }),
 
   editligths: helpers.AsyncHanddle(async (req, res) => {
-    let title = "lights";
-    // let store = await StoreModel.find();
-    // let category = await categoryModel.find({ deleted: false });
-    let store = await StoreModel.find();
-    let Brand = await BrandModel.find();
-    let Productunit = await ProductUnintModel.find();
-    const lightdetail = await Model.LightsModel.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } },
 
-      {
-        $lookup: {
-          from: "users",
-          localField: "userId",
-          foreignField: "_id",
-          as: "userId",
+    try {
+
+
+      let title = "lights";
+      // let store = await StoreModel.find();
+      // let category = await categoryModel.find({ deleted: false });
+      let store = await StoreModel.find();
+      let Brand = await BrandModel.find();
+      let Productunit = await ProductUnintModel.find();
+      const lightdetail = await Model.LightsModel.aggregate([
+        { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } },
+
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userId",
+          },
         },
-      },
 
-      { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
 
-      {
-        $lookup: {
-          from: "categories",
-          localField: "categoryNames",
-          foreignField: "_id",
-          as: "categoryNames",
+        {
+          $lookup: {
+            from: "categories",
+            localField: "categoryNames",
+            foreignField: "_id",
+            as: "categoryNames",
+          },
         },
-      },
 
-      { $unwind: { path: "$categoryNames", preserveNullAndEmptyArrays: true } },
-      {
-        $lookup: {
-          from: "brands", // Ensure the collection name is correct
-          localField: "BrandID", // Ensure LightsModel has this field
-          foreignField: "_id",
-          as: "brand",
+        { $unwind: { path: "$categoryNames", preserveNullAndEmptyArrays: true } },
+        {
+          $lookup: {
+            from: "brands", // Ensure the collection name is correct
+            localField: "BrandID", // Ensure LightsModel has this field
+            foreignField: "_id",
+            as: "brand",
+          },
         },
-      },
-      { $unwind: { path: "$brand", preserveNullAndEmptyArrays: true } },
-      {
-        $lookup: {
-          from: "prodiuctunits",
-          localField: "productUnitId",
-          foreignField: "_id",
-          as: "Unit",
+        { $unwind: { path: "$brand", preserveNullAndEmptyArrays: true } },
+        {
+          $lookup: {
+            from: "prodiuctunits",
+            localField: "productUnitId",
+            foreignField: "_id",
+            as: "Unit",
+          },
         },
-      },
-      { $unwind: { path: "$Unit", preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$Unit", preserveNullAndEmptyArrays: true } },
 
-      { $unwind: { path: "$product", preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$product", preserveNullAndEmptyArrays: true } },
 
-      {
-        $lookup: {
-          from: "stores",
-          localField: "product.shopName",
-          foreignField: "_id",
-          as: "product.shopName",
+        {
+          $lookup: {
+            from: "stores",
+            localField: "product.shopName",
+            foreignField: "_id",
+            as: "product.shopName",
+          },
         },
-      },
 
-      {
-        $unwind: {
-          path: "$product.shopName",
-          preserveNullAndEmptyArrays: true,
+        {
+          $unwind: {
+            path: "$product.shopName",
+            preserveNullAndEmptyArrays: true,
+          },
         },
-      },
 
-      {
-        $group: {
-          _id: "$_id",
-          userId: { $first: "$userId" },
-          categoryNames: { $first: "$categoryNames" },
-          name: { $first: "$name" },
-          nameArabic: { $first: "$nameArabic" },
-          descriptionArabic: { $first: "$descriptionArabic" },
-          Brandname: { $first: "$brand.Brandname" },
-          BrandnameArabic: { $first: "$brand.BrandnameArabic" },
-          BarCode: { $first: "$BarCode" },
-          description: { $first: "$description" },
-          price: { $first: "$price" },
-          image: { $first: "$image" },
-          qrCode: { $first: "$qrCode" },
-          productUnitName: { $first: "$Unit.ProdiuctUnit" },
+        {
+          $group: {
+            _id: "$_id",
+            userId: { $first: "$userId" },
+            categoryNames: { $first: "$categoryNames" },
+            name: { $first: "$name" },
+            nameArabic: { $first: "$nameArabic" },
+            descriptionArabic: { $first: "$descriptionArabic" },
+            Brandname: { $first: "$brand.Brandname" },
+            BrandnameArabic: { $first: "$brand.BrandnameArabic" },
+            BarCode: { $first: "$BarCode" },
+            description: { $first: "$description" },
+            price: { $first: "$price" },
+            image: { $first: "$image" },
+            qrCode: { $first: "$qrCode" },
+            productUnitName: { $first: "$Unit.ProdiuctUnit" },
 
-          deleted: { $first: "$deleted" },
-          createdAt: { $first: "$createdAt" },
-          updatedAt: { $first: "$updatedAt" },
-          product: {
-            $push: {
-              shopName: {
-                _id: "$product.shopName._id",
-                name: "$product.shopName.name",
-                image: "$product.shopName.image",
+            deleted: { $first: "$deleted" },
+            createdAt: { $first: "$createdAt" },
+            updatedAt: { $first: "$updatedAt" },
+            product: {
+              $push: {
+                shopName: {
+                  _id: "$product.shopName._id",
+                  name: "$product.shopName.name",
+                  image: "$product.shopName.image",
+                },
+                _id: "$product._id",
+                price: "$product.price",
+                Location: "$product.Location",
+                date: "$product.date",
               },
-              _id: "$product._id",
-              price: "$product.price",
-              Location: "$product.Location",
-              date: "$product.date",
             },
           },
         },
-      },
-    ]);
-    console.log(lightdetail[0], "lightdetaillightdetail");
+      ]);
+      console.log(lightdetail[0], "lightdetaillightdetail");
 
-    res.render("Admin/lights/editActivity", {
-      title,
-      lightdetail: lightdetail[0],
-      store: store,
-      Brand: Brand,
-      Productunit: Productunit,
-      session: req.session.user,
-      message: req.flash("message"),
-      msg: req.flash("msg"),
-    });
+      res.render("Admin/lights/editActivity", {
+        title,
+        lightdetail: lightdetail[0],
+        store: store,
+        Brand: Brand,
+        Productunit: Productunit,
+        session: req.session.user,
+        message: req.flash("message"),
+        msg: req.flash("msg"),
+      });
+
+    } catch (error) {
+
+    }
   }),
 
   updatelights: helpers.AsyncHanddle(async (req, res) => {
@@ -970,13 +1024,13 @@ module.exports = {
 
         for (let user of users) {
           if (user.Notifyme === 1) {
-          
-       
+
+
             const notification_type = 1;
-         
+
             const ProductId = updatedProduct._id;
             await helper.send_push_notifications(
-             `${updatedProduct.name} Product New Price Update`,
+              `${updatedProduct.name} Product New Price Update`,
               user.deviceToken,
               user.deviceType,
               user.name,
@@ -1464,16 +1518,26 @@ module.exports = {
     }
   },
   deleteLights: helpers.AsyncHanddle(async (req, res) => {
-    let id = req.body.id;
-    await Model.LightsModel.findByIdAndDelete(
-      { _id: id },
-      { deleted: true },
-      { new: true }
-    );
-    res.redirect("/ActivityList");
+    try {
+
+      let id = req.body.id;
+      await Model.LightsModel.findByIdAndDelete(
+        { _id: id },
+        { deleted: true },
+        { new: true }
+      );
+      res.redirect("/ActivityList");
+
+    } catch (error) {
+
+    }
   }),
 
   activityStatus: helpers.AsyncHanddle(async (req, res) => {
+
+    try {
+      
+  
     await Model.LightsModel.updateOne(
       { _id: req.body.id },
       { status: req.body.value }
@@ -1481,9 +1545,16 @@ module.exports = {
     req.flash("msg", "Status update successfully");
     if (req.body.value == 0) res.send(false);
     if (req.body.value == 1) res.send(true);
+      } catch (error) {
+      
+    }
   }),
 
   viewCustomizedActivity: helpers.AsyncHanddle(async (req, res) => {
+
+    try {
+      
+   
     let title = "Activity";
     const activitydetail = await Model.LightsModel.findById({
       _id: req.params.id,
@@ -1495,9 +1566,16 @@ module.exports = {
       message: req.flash("message"),
       msg: req.flash("msg"),
     });
+     } catch (error) {
+      
+    }
   }),
 
   findupdatedPrice: helpers.AsyncHanddle(async (req, res) => {
+
+    try {
+      
+  
     let title = "lights";
 
     const activityView = await Model.LightsModel.findById(req.params.id)
@@ -1534,6 +1612,9 @@ module.exports = {
       message: req.flash("message"),
       msg: req.flash("msg"),
     });
+      } catch (error) {
+      
+    }
   }),
   // DownloadPdfProduct:async(req,res)=>{
   //   try {

@@ -78,6 +78,7 @@ module.exports = {
           countryCode: countryCode,
           phoneNnumberWithCode: concatenatedValue,
           otpVerify: 0,
+          otpAttempts: 0
         });
       }
 
@@ -151,14 +152,14 @@ module.exports = {
       const fullPhone = user.phoneNnumberWithCode;
 
       if (phoneNnumberWithCode == "+918708998078") {
-         authenticaResponse = {
+        authenticaResponse = {
           data: {
-            status:true,
+            status: false,
           }
         };
 
       } else {
-         authenticaResponse = await axios.post(
+        authenticaResponse = await axios.post(
           "https://api.authentica.sa/api/v1/verify-otp",
           {
             phone: fullPhone,
@@ -175,12 +176,11 @@ module.exports = {
         );
       }
 
-
       if (authenticaResponse.data.status === true) {
         const updatedUser = await Model.UserModel.findByIdAndUpdate(
           user._id,
           {
-            otpVerify: 1,
+            otpAttempts: 0, // reset
             isProfileComplete: 1,
             loginTime: Math.floor(Date.now() / 1000),
             deviceToken: deviceToken,
@@ -218,6 +218,19 @@ module.exports = {
         }
         return helpers.success(res, message, userData);
       } else {
+
+        user.otpAttempts = (user.otpAttempts || 0) + 1;
+        await user.save();
+
+        // Check if attempts exceeded
+        if (user.otpAttempts >= 3) {
+          let message = "Maximum attempts reached. Please resend OTP again.";
+          if (req.headers.language_type == "ar") {
+            message = "تم الوصول إلى الحد الأقصى للمحاولات. يرجى إعادة إرسال كلمة المرور لمرة واحدة.";
+          }
+          return helpers.failed(res, message);
+        }
+
         let message = `OTP verification failed: ${authenticaResponse.data.message}`;
         if (req.headers.language_type == "ar") {
           message = `فشل التحقق من كلمة المرور: ${authenticaResponse.data.message}`;
@@ -271,6 +284,22 @@ module.exports = {
       const fullPhone = phonenumber;
       console.log(fullPhone, "fullPhone");
 
+
+      if (fullPhone == "+918708998078") {
+        const updatedUser = await Model.UserModel.findOneAndUpdate(
+          { _id: user._id },
+          { otpVerify: 0,otpAttempts: 0 }, // Ensure otpVerify is reset
+          { new: true }
+        );
+         let message = "OTP resent successfully";
+        if (req.headers.language_type === "ar") {
+          message = "تم إعادة إرسال كلمة المرور لمرة واحدة بنجاح";
+        }
+        return helpers.success(res, message, updatedUser);
+      }
+
+
+
       const apiResponse = await axios.post(
         "https://api.authentica.sa/api/v1/send-otp",
         {
@@ -290,10 +319,14 @@ module.exports = {
         }
       );
 
+      console.log(apiResponse, ">>>>>>>apiResponse>>>>>");
+
+
       // Update OTP in the user model
       const updatedUser = await Model.UserModel.findOneAndUpdate(
         { _id: user._id },
         { otpVerify: 0 }, // Ensure otpVerify is reset
+        { otpAttempts: 0 }, // Ensure otpVerify is reset
         { new: true }
       );
       delete userData.otp
@@ -304,6 +337,9 @@ module.exports = {
         }
         throw new Error(message);
       }
+      console.log(updatedUser, ">>>>>>>>>updatedUser>.");
+
+
 
       // Check if OTP was successfully sent
       if (apiResponse.data && apiResponse.data.success) {
@@ -316,6 +352,8 @@ module.exports = {
         throw new Error("Failed to send OTP via external service");
       }
     } catch (error) {
+      console.log(error, ">>>>>>>>>>>");
+
       return helpers.error(res, error.message || error);
     }
   },

@@ -2,6 +2,7 @@ const createError = require("http-errors");
 const express = require("express");
 const sanitizeInputs = require('./utility/sanitizeInputs');
 const app = express();
+const csrf = require('csurf');
 const helmet = require("helmet");
 const compression = require("compression");
 const http = require("http").Server(app);
@@ -29,6 +30,7 @@ app.use(fileupload());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(helmet());
+const csrfProtection = csrf({ cookie: true });
 app.use(
   express.static(path.join(__dirname, "public"), {
     maxAge: "1y", 

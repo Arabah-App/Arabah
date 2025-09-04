@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
-   
+
     image: {
       type: String,
       default: "",
@@ -90,6 +90,9 @@ const userSchema = new mongoose.Schema(
       default: null,
     },
     otp: {
+      type: Number,
+    },
+    otpAttempts: {
       type: Number,
     },
     otpVerify: {

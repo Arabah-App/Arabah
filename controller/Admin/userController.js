@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 
 module.exports = {
   createUser: helpers.AsyncHanddle(async (req, res) => {
+    try{
     const userExist = await Model.UserModel.findOne({ email: req.body.email });
     if (userExist) {
       return helper.failed(res, "Email Already Exist");
@@ -25,6 +26,10 @@ module.exports = {
       password: hash,
     });
     return helper.success(res, "created successfully", createuser);
+    } catch (error) {
+      console.log(error);
+      
+    }
   }),
 
   addUser: helpers.AsyncHanddle(async (req, res) => {
@@ -38,6 +43,7 @@ module.exports = {
   }),
 
   editUser: helpers.AsyncHanddle(async (req, res) => {
+    try{
     let title = "userList";
     const updatedata = await Model.UserModel.findOne({ _id: req.params.id });
 
@@ -49,9 +55,14 @@ module.exports = {
       message: req.flash("message"),
       msg: req.flash("msg"),
     });
+    } catch (error) {
+      console.log(error);
+      
+    }
   }),
 
   updateUser: helpers.AsyncHanddle(async (req, res) => {
+    try{
     if (req.files && req.files.image) {
       var image = req.files.image;
       if (image) {
@@ -69,9 +80,14 @@ module.exports = {
       }
     );
     res.redirect("/userList");
+    } catch (error) {
+      console.log(error);
+      
+    }
   }),
 
   userList: helpers.AsyncHanddle(async (req, res) => {
+    try{
     let title = "userList";
     const userData = await Model.UserModel.find({
       role: 1,
@@ -96,9 +112,14 @@ module.exports = {
       message: req.flash("message"),
       msg: req.flash("msg"),
     });
+    } catch (error) {
+      console.log(error);
+      
+    }
   }),
 
   viewUser: helpers.AsyncHanddle(async (req, res) => {
+    try{
     let title = "userList";
     const userdetails = await Model.UserModel.findById({ _id: req.params.id });
     res.render("Admin/user/viewUser", {
@@ -108,8 +129,14 @@ module.exports = {
       msg: req.flash("msg"),
       message: req.flash("message"),
 });
+} catch (error) {
+      console.log(error);
+      
+    }
+
   }),
   viewUserinreport: helpers.AsyncHanddle(async (req, res) => {
+    try{
     let title = "RaiseList";
     const userdetails = await Model.UserModel.findById({ _id: req.params.userId });
     console.log("🚀 ~ viewUserinreport:helpers.AsyncHanddle ~ userdetails:", userdetails)
@@ -121,8 +148,14 @@ module.exports = {
       msg: req.flash("msg"),
       message: req.flash("message"),
 });
+} catch (error) {
+      console.log(error);
+      
+    }
+
   }),
   viewcomment: helpers.AsyncHanddle(async (req, res) => {
+    try{
     let title = "userList";
     const userdetails = await Model.UserModel.findById({ _id: req.params.id });
     let comment = await Model.commentsModel
@@ -143,8 +176,13 @@ module.exports = {
       message: req.flash("message"),
       msg: req.flash("msg"),
     });
+    } catch (error) {
+      console.log(error);
+      
+    }
   }),
   viewReport: helpers.AsyncHanddle(async (req, res) => {
+    try{
     let title = "userList";
     const userdetails = await Model.UserModel.findById({ _id: req.params.id });
     let Report = await Model.reportModel
@@ -165,8 +203,13 @@ module.exports = {
       message: req.flash("message"),
       msg: req.flash("msg"),
     });
+    } catch (error) {
+      console.log(error);
+      
+    }
   }),
   viewRating: helpers.AsyncHanddle(async (req, res) => {
+    try{
     let title = "userList";
     let rating = await Model.ratingModel
       .find({
@@ -185,9 +228,14 @@ module.exports = {
       message: req.flash("message"),
       msg: req.flash("msg"),
     });
+    } catch (error) {
+      console.log(error);
+      
+    }
   }),
 
   customerList: helpers.AsyncHanddle(async (req, res) => {
+    try{
     let title = "userList";
     const userId = req.params.id;
     const customerdetails = await Model.CustomerModel.find({
@@ -200,9 +248,14 @@ module.exports = {
       message: req.flash("message"),
       msg: req.flash("msg"),
     });
+    } catch (error) {
+      console.log(error);
+      
+    }
   }),
 
   teamMemberlist: helpers.AsyncHanddle(async (req, res) => {
+    try{
     let title = "userList";
     const userId = req.params.id;
     const teamMemberdetails = await Model.TeamMemberModel.find({
@@ -215,9 +268,14 @@ module.exports = {
       message: req.flash("message"),
       msg: req.flash("msg"),
     });
+    } catch (error) {
+      console.log(error);
+      
+    }
   }),
 
   userStatus: helpers.AsyncHanddle(async (req, res) => {
+     try {
     await Model.UserModel.updateOne(
       { _id: req.body.id },
       { status: req.body.value }
@@ -225,9 +283,17 @@ module.exports = {
     req.flash("msg", "Status updated successfully");
     if (req.body.value == 0) res.send(false);
     if (req.body.value == 1) res.send(true);
+    } catch (error) {
+      console.log(error);
+      
+    }
   }),
 
   deleteUser: helpers.AsyncHanddle(async (req, res) => {
+
+    try {
+      
+   
     let userId = req.body.id;
     await Model.UserModel.findByIdAndUpdate(
       { _id: userId },
@@ -235,5 +301,9 @@ module.exports = {
       { new: true }
     );
     res.redirect("/userList");
+     } catch (error) {
+      console.log(error);
+      
+    }
   }),
 };

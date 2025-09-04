@@ -39,7 +39,7 @@ module.exports = {
         ]);
       console.log("🚀 ~ viewreport: ~ activitydetail:", activitydetail);
       res.render("Admin/report/reportView.ejs", {
-        title:"",
+        title: "",
         activitydetail,
         session: req.session.user,
         message: req.flash("message"),
@@ -50,12 +50,21 @@ module.exports = {
     }
   },
   ReportStatus: helpers.AsyncHanddle(async (req, res) => {
-    await Model.reportModel.updateOne(
-      { _id: req.body.id },
-      { status: req.body.value }
-    );
-    req.flash("msg", "ReportStatus updated successfully");
-    if (req.body.value == 0) res.send(false);
-    if (req.body.value == 1) res.send(true);
+
+    try {
+
+
+
+      await Model.reportModel.updateOne(
+        { _id: req.body.id },
+        { status: req.body.value }
+      );
+      req.flash("msg", "ReportStatus updated successfully");
+      if (req.body.value == 0) res.send(false);
+      if (req.body.value == 1) res.send(true);
+
+    } catch (error) {
+
+    }
   }),
 };

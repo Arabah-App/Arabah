@@ -3,7 +3,7 @@ const express = require("express");
 const sanitizeInputs = require('./utility/sanitizeInputs');
 const app = express();
 const csrf = require('csurf');
-const helmet = require("helmet");
+// const helmet = require("helmet");
 const compression = require("compression");
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
@@ -29,7 +29,8 @@ app.use(sanitizeInputs);
 app.use(fileupload());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(helmet());
+// app.use(helmet());
+
 const csrfProtection = csrf({ cookie: true });
 app.use(
   express.static(path.join(__dirname, "public"), {

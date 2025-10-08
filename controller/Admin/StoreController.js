@@ -40,13 +40,15 @@ module.exports = {
   // },
   postStore: async (req, res) => {
     try {
-      if (req.body.image) {
-        const base64Image = req.body.image;
+      if (req.files.image) {
+        // const base64Image = req.files.image;
   
-        const imagePath = helper.imageUploadrop(base64Image, 'images'); 
+        // const imagePath = helper.imageUploadrop(base64Image, 'images'); 
+        const uploadedImage = helper.imageUpload(req.files.image, "images");
+            req.body.image = uploadedImage.path; // Store only 
   
         await StoreModel.create({
-          image: imagePath,
+          image: req.body.image,
           name: req.body.name,
           nameArabic: req.body.nameArabic,
         });
